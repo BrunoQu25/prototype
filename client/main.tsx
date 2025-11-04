@@ -34,3 +34,5 @@ const RootApp = () => (
 );
 
 createRoot(document.getElementById("root")!).render(<RootApp />);
+
+export default RootApp;
