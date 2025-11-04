@@ -10,10 +10,10 @@ export default function Home() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-12">
+      <section className="px-3 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-12">
         <div className="mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-game-brown mb-3 animate-bounce-slow">
-            ¿Qu�� jugamos hoy?
+            ¿Qué jugamos hoy?
           </h1>
           <p className="text-game-brown text-opacity-70 text-lg">
             Explora nuestra colección de juegos de mesa para la noche perfecta
