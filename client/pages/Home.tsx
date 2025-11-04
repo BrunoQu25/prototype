@@ -111,8 +111,8 @@ export default function Home() {
                       <span className="text-xs font-semibold text-game-brown">{game.rating}</span>
                     </div>
 
-                    {/* Category Badge - Smaller */}
-                    <div className="inline-block px-2 py-0.5 bg-game-sage bg-opacity-10 border border-game-sage rounded-full text-xs font-semibold text-game-sage mb-2">
+                    {/* Category Badge - Improved Contrast */}
+                    <div className="inline-block px-2 py-0.5 bg-game-sage text-white rounded-full text-xs font-semibold mb-2 w-fit">
                       {game.category}
                     </div>
 
