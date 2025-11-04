@@ -15,7 +15,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-game-cream to-amber-50 flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white shadow-md border-b-4 border-game-rust safe-area-inset-top">
+      <header className="sticky top-0 z-40 bg-white shadow-md border-b-4 border-game-rust" style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}>
         <div className="px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
