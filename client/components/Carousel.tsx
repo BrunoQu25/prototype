@@ -29,11 +29,14 @@ export default function Carousel({ children }: CarouselProps) {
 
   const scroll = (direction: "left" | "right") => {
     if (containerRef.current) {
-      const scrollAmount = 300;
+      // Calculate scroll amount based on item width (approximately 1/3 of container width + gap)
+      const container = containerRef.current;
+      const itemWidth = container.offsetWidth / 3 + 16; // 16px for gap
+      const scrollAmount = itemWidth;
       const newScrollLeft =
-        containerRef.current.scrollLeft +
+        container.scrollLeft +
         (direction === "left" ? -scrollAmount : scrollAmount);
-      containerRef.current.scrollTo({
+      container.scrollTo({
         left: newScrollLeft,
         behavior: "smooth",
       });
