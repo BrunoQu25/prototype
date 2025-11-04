@@ -24,9 +24,9 @@ export default function ProductDetail() {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="px-3 sm:px-6 py-4 sm:py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-game-brown text-opacity-70 mb-8">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-game-brown text-opacity-70 mb-4 sm:mb-8 overflow-x-auto">
           <Link to="/" className="hover:text-game-brown">
             Inicio
           </Link>
