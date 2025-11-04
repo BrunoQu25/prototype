@@ -1,60 +1,76 @@
-import { useEffect, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import EmblaCarousel from "embla-carousel-react";
 
 interface CarouselProps {
   children: React.ReactNode;
 }
 
 export default function Carousel({ children }: CarouselProps) {
-  const [emblaRef, emblaApi] = EmblaCarousel({ align: "start", loop: false });
-  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
-  const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (containerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
 
   useEffect(() => {
-    if (!emblaApi) return;
+    checkScroll();
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("scroll", checkScroll);
+      return () => container.removeEventListener("scroll", checkScroll);
+    }
+  }, []);
 
-    const onSelect = () => {
-      setPrevBtnDisabled(!emblaApi.canScrollPrev());
-      setNextBtnDisabled(!emblaApi.canScrollNext());
-    };
-
-    emblaApi.on("select", onSelect);
-    onSelect();
-
-    return () => {
-      emblaApi.off("select", onSelect);
-    };
-  }, [emblaApi]);
-
-  const scrollPrev = () => emblaApi?.scrollPrev();
-  const scrollNext = () => emblaApi?.scrollNext();
+  const scroll = (direction: "left" | "right") => {
+    if (containerRef.current) {
+      const scrollAmount = 300;
+      const newScrollLeft =
+        containerRef.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
+      containerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <div className="relative group">
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4">{children}</div>
+      <div
+        ref={containerRef}
+        className="overflow-x-auto scrollbar-hide"
+        style={{ scrollBehavior: "smooth" }}
+      >
+        <div className="flex gap-4 pb-2">{children}</div>
       </div>
 
       {/* Left Arrow */}
-      <button
-        onClick={scrollPrev}
-        disabled={prevBtnDisabled}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-6 z-10 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
-        aria-label="Previous"
-      >
-        <ChevronLeft className="w-5 h-5 text-game-rust" />
-      </button>
+      {canScrollLeft && (
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-6 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all"
+          aria-label="Previous"
+        >
+          <ChevronLeft className="w-5 h-5 text-game-rust" />
+        </button>
+      )}
 
       {/* Right Arrow */}
-      <button
-        onClick={scrollNext}
-        disabled={nextBtnDisabled}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-6 z-10 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
-        aria-label="Next"
-      >
-        <ChevronRight className="w-5 h-5 text-game-rust" />
-      </button>
+      {canScrollRight && (
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-6 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all"
+          aria-label="Next"
+        >
+          <ChevronRight className="w-5 h-5 text-game-rust" />
+        </button>
+      )}
     </div>
   );
 }
