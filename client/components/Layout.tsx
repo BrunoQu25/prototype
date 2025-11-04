@@ -95,38 +95,38 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 overflow-y-auto">{children}</main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl">
-        <div className="max-w-7xl mx-auto flex justify-around">
+      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+        <div className="flex justify-around">
           <Link
             to="/"
-            className={`flex flex-col items-center justify-center w-full py-3 sm:py-4 transition ${
+            className={`flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition ${
               isActive("/") ? "text-game-rust" : "text-game-brown hover:text-game-rust"
             }`}
           >
-            <Home className="w-6 h-6 mb-1" />
-            <span className="text-xs sm:text-sm font-medium">Inicio</span>
+            <Home className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+            <span className="text-xs font-medium">Inicio</span>
           </Link>
-          <button className="flex flex-col items-center justify-center w-full py-3 sm:py-4 transition text-game-brown hover:text-game-rust">
-            <Gamepad2 className="w-6 h-6 mb-1" />
-            <span className="text-xs sm:text-sm font-medium">Mis Juegos</span>
+          <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
+            <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+            <span className="text-xs font-medium">Mis Juegos</span>
           </button>
           <Link
             to="/"
-            className="flex flex-col items-center justify-center w-full py-3 sm:py-4 transition text-game-brown hover:text-game-rust"
+            className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust"
           >
-            <Plus className="w-6 h-6 mb-1" />
-            <span className="text-xs sm:text-sm font-medium">Agregar</span>
+            <Plus className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+            <span className="text-xs font-medium">Agregar</span>
           </Link>
-          <button className="flex flex-col items-center justify-center w-full py-3 sm:py-4 transition text-game-brown hover:text-game-rust">
-            <MoreHorizontal className="w-6 h-6 mb-1" />
-            <span className="text-xs sm:text-sm font-medium">Más</span>
+          <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
+            <MoreHorizontal className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+            <span className="text-xs font-medium">Más</span>
           </button>
-          <button className="flex flex-col items-center justify-center w-full py-3 sm:py-4 transition text-game-brown hover:text-game-rust">
-            <User className="w-6 h-6 mb-1" />
-            <span className="text-xs sm:text-sm font-medium">Perfil</span>
+          <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
+            <User className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+            <span className="text-xs font-medium">Perfil</span>
           </button>
         </div>
       </nav>
