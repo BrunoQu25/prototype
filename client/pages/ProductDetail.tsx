@@ -6,6 +6,7 @@ import {
   Users,
   ChevronRight,
   Star,
+  MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import { games } from "@/data/games";
@@ -59,7 +60,7 @@ export default function ProductDetail() {
           <div className="flex flex-col gap-6">
             {/* Header */}
             <div>
-              <div className="inline-block px-4 py-2 bg-game-rust bg-opacity-10 border border-game-rust rounded-full text-sm font-semibold text-game-rust mb-4">
+              <div className="inline-block px-4 py-2 bg-game-rust bg-opacity-10 border border-game-rust rounded-full text-sm font-semibold text-white mb-4">
                 {game.category}
               </div>
               <h1 className="text-4xl font-bold text-game-brown mb-3">
@@ -67,7 +68,7 @@ export default function ProductDetail() {
               </h1>
 
               {/* Rating */}
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 ">
                 <div className="flex gap-1">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
@@ -88,6 +89,48 @@ export default function ProductDetail() {
                 </span>
               </div>
             </div>
+            {/* Propietario (owner card) */}
+            <div>
+              <h2 className="text-xl font-bold text-game-brown mb-3">Propietario</h2>
+
+              {/* Owner Card */}
+              {(() => {
+                // derive a mock owner from available data or fallback
+                const ownerName = game.reviews_list?.[0]?.name ?? "Carla S";
+                const initials = ownerName
+                  .split(" ")
+                  .map((s) => s[0])
+                  .slice(0, 2)
+                  .join("");
+                const ownerLocation = "Montevideo";
+                const responseTime = "~15m";
+                const ownerRating = 4.9;
+
+                return (
+                  <div className="bg-white rounded-2xl p-4 border-2 border-game-brown border-opacity-10 shadow-md flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-game-gold to-amber-400 flex items-center justify-center text-lg font-bold text-white shadow-md">
+                        {initials}
+                      </div>
+                      <div>
+                        <p className="font-bold text-game-brown">{ownerName}</p>
+                        <p className="text-sm text-game-brown text-opacity-60">{ownerLocation} · {responseTime} response</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Star className="w-4 h-4 text-game-gold" />
+                          <span className="text-sm font-semibold text-game-brown">{ownerRating}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <button className="px-3 py-1 border rounded-md bg-transparent text-game-brown hover:bg-game-brown hover:text-white transition text-sm">
+                        View profile
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
 
             {/* Description */}
             <div>
@@ -101,7 +144,7 @@ export default function ProductDetail() {
 
             {/* Rules */}
             <div className="bg-game-cream rounded-2xl p-6 border-2 border-game-brown border-opacity-10">
-              <h3 className="text-lg font-bold text-game-brown mb-4">Reglas</h3>
+              <h3 className="text-lg font-bold text-game-brown mb-4">Sobre el juego</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-game-brown">
                   <Clock className="w-5 h-5 text-game-rust flex-shrink-0" />
@@ -123,7 +166,7 @@ export default function ProductDetail() {
                 className="w-full mt-4 px-4 py-3 bg-game-navy text-white rounded-xl font-semibold hover:bg-opacity-90 transition flex items-center justify-center gap-2"
               >
                 <span>📜</span>
-                Ver Reglas Completas
+                Ver Más
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -152,10 +195,12 @@ export default function ProductDetail() {
                     {isWishlisted ? "En" : "Agregar a"} Lista
                   </span>
                 </button>
-                <button className="py-3 rounded-xl font-bold bg-white text-game-rust hover:bg-opacity-90 transition flex items-center justify-center gap-2 border-2 border-white">
-                  <ShoppingCart className="w-5 h-5" />
-                  <span className="hidden sm:inline">Alquilar</span>
-                </button>
+                <Link
+                  to={`/product/${game.id}/rental`}
+                  className="py-3 rounded-xl font-bold bg-white text-game-rust hover:bg-opacity-90 transition flex items-center justify-center gap-2 border-2 border-white"
+                >
+                  <span className="sm:inline">Alquilar</span>
+                </Link>
               </div>
             </div>
           </div>

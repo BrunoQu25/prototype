@@ -12,7 +12,7 @@ export default function Home() {
     <Layout>
       {/* Hero Section */}
       <section className="px-3 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-12">
-        <div className="mb-12">
+        <div className="mb-5">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-game-brown mb-3 animate-bounce-slow">
             ¿Qué jugamos hoy?
           </h1>
@@ -22,7 +22,7 @@ export default function Home() {
         </div>
 
         {/* Featured Games - Carousel */}
-        <div className="mb-16">
+        <div className="mb-10">
           <h2 className="text-2xl font-bold text-game-brown mb-6 flex items-center gap-2">
             <span className="text-3xl">✨</span>
             Destacados
@@ -87,34 +87,38 @@ export default function Home() {
           </Carousel>
         </div>
 
-        {/* Recently Added - Grid with 3 columns */}
+        {/* Recently Added - Carousel (compact cards like Featured) */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-game-brown mb-6 flex items-center gap-2">
             <span className="text-3xl">🆕</span>
             Recién Agregado
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Carousel>
             {recentlyAdded.map((game) => (
-              <Link key={game.id} to={`/product/${game.id}`}>
-                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 border-2 border-game-sage border-opacity-30 cursor-pointer h-full">
-                  {/* Game Image Area - Smaller */}
-                  <div className="bg-gradient-to-br from-game-sage to-green-200 h-32 flex items-center justify-center text-6xl animate-float">
+              <Link
+                key={game.id}
+                to={`/product/${game.id}`}
+                className="flex-shrink-0 w-1/3 sm:w-1/4 px-1.5 sm:px-2 min-w-0"
+              >
+                <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 border-2 border-game-sage border-opacity-30 cursor-pointer h-full flex flex-col">
+                  {/* Game Image Area - Compact */}
+                  <div className="bg-gradient-to-br from-game-sage to-green-200 h-28 flex items-center justify-center text-6xl animate-float flex-shrink-0">
                     {game.image}
                   </div>
 
                   {/* Game Info - Compact */}
-                  <div className="p-3">
+                  <div className="p-3 flex flex-col flex-grow">
                     <h3 className="font-bold text-base text-game-brown mb-1 line-clamp-1">
                       {game.title}
                     </h3>
 
-                    {/* Rating - Smaller */}
-                    <div className="flex items-center gap-1 mb-2">
+                    {/* Rating */}
+                    <div className="flex items-center gap-0.5 mb-1.5 sm:mb-3">
                       <div className="flex gap-0.5">
                         {Array.from({ length: 5 }).map((_, i) => (
                           <Star
                             key={i}
-                            className={`w-3 h-3 ${
+                            className={`w-2 h-2 sm:w-3 sm:h-3 ${
                               i < Math.floor(game.rating)
                                 ? "fill-game-gold text-game-gold"
                                 : "text-game-brown text-opacity-20"
@@ -122,18 +126,21 @@ export default function Home() {
                           />
                         ))}
                       </div>
-                      <span className="text-xs font-semibold text-game-brown">
+                      <span className="text-xs font-semibold text-game-brown hidden sm:inline">
                         {game.rating}
+                      </span>
+                      <span className="text-xs text-game-brown text-opacity-50 hidden sm:inline">
+                        ({game.reviews})
                       </span>
                     </div>
 
-                    {/* Category Badge - Improved Contrast */}
+                    {/* Category Badge */}
                     <div className="inline-block px-2 py-0.5 bg-game-sage text-white rounded-full text-xs font-semibold mb-2 w-fit">
                       {game.category}
                     </div>
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between pt-2 border-t border-game-brown border-opacity-10">
+                    <div className="flex items-center justify-between pt-2 border-t border-game-brown border-opacity-10 mt-auto">
                       <span className="font-bold text-sm text-game-rust">
                         ${game.price}/día
                       </span>
@@ -143,25 +150,25 @@ export default function Home() {
                 </div>
               </Link>
             ))}
-          </div>
+          </Carousel>
         </div>
 
-        {/* Categories */}
+        {/* Categories - Grid (2 columns) */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-game-brown mb-6 flex items-center gap-2">
             <span className="text-3xl">🎯</span>
             Categorías
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             {categories.map((category) => (
               <button
                 key={category.id}
-                className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all border-2 border-game-brown border-opacity-10 hover:border-game-rust hover:border-opacity-50 group"
+                className="w-full h-12 bg-white rounded-lg px-3 shadow-md hover:shadow-lg transition-all border-2 border-game-brown border-opacity-10 hover:border-game-rust hover:border-opacity-50 group flex items-center gap-3"
               >
-                <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">
+                <div className="text-2xl sm:text-3xl flex-shrink-0 group-hover:scale-110 transition-transform">
                   {category.icon}
                 </div>
-                <p className="font-bold text-game-brown text-center text-sm sm:text-base">
+                <p className="font-bold text-game-brown text-left text-sm sm:text-base truncate">
                   {category.name}
                 </p>
               </button>
