@@ -28,50 +28,45 @@ export default function Home() {
             Destacados
           </h2>
           <Carousel>
-            {featuredGames.map((game) => (
-              <Link key={game.id} to={`/product/${game.id}`} className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-2">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 border-2 border-game-gold border-opacity-50 cursor-pointer h-full">
+            {games.map((game) => (
+              <Link key={game.id} to={`/product/${game.id}`} className="flex-shrink-0 w-1/3 px-2 min-w-0">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 border-2 border-game-gold border-opacity-50 cursor-pointer h-full flex flex-col">
                   {/* Game Image Area */}
-                  <div className="bg-gradient-to-br from-game-gold to-amber-200 h-48 flex items-center justify-center text-8xl animate-float">
+                  <div className="bg-gradient-to-br from-game-gold to-amber-200 h-48 flex items-center justify-center text-8xl animate-float flex-shrink-0">
                     {game.image}
                   </div>
 
                   {/* Game Info */}
-                  <div className="p-5">
-                    <h3 className="font-bold text-xl text-game-brown mb-2 line-clamp-2">
+                  <div className="p-4 flex flex-col flex-grow">
+                    <h3 className="font-bold text-lg text-game-brown mb-2 line-clamp-2 flex-grow">
                       {game.title}
                     </h3>
 
                     {/* Rating */}
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-1 mb-3">
                       <div className="flex gap-0.5">
                         {Array.from({ length: 5 }).map((_, i) => (
                           <Star
                             key={i}
-                            className={`w-4 h-4 ${
+                            className={`w-3 h-3 ${
                               i < Math.floor(game.rating) ? "fill-game-gold text-game-gold" : "text-game-brown text-opacity-20"
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="text-sm font-semibold text-game-brown">{game.rating}</span>
+                      <span className="text-xs font-semibold text-game-brown">{game.rating}</span>
                       <span className="text-xs text-game-brown text-opacity-50">({game.reviews})</span>
                     </div>
 
-                    {/* Category Badge */}
-                    <div className="inline-block px-3 py-1 bg-game-rust bg-opacity-10 border border-game-rust rounded-full text-xs font-semibold text-game-rust mb-3">
+                    {/* Category Badge - Improved Contrast */}
+                    <div className="inline-block px-3 py-1 bg-game-rust text-white rounded-full text-xs font-semibold mb-3 w-fit">
                       {game.category}
                     </div>
 
-                    {/* Description */}
-                    <p className="text-sm text-game-brown text-opacity-70 line-clamp-2 mb-3">
-                      {game.description}
-                    </p>
-
                     {/* Footer */}
-                    <div className="flex items-center justify-between pt-3 border-t border-game-brown border-opacity-10">
-                      <span className="font-bold text-lg text-game-rust">${game.price}/día</span>
-                      <ChevronRight className="w-5 h-5 text-game-gold" />
+                    <div className="flex items-center justify-between pt-2 border-t border-game-brown border-opacity-10 mt-auto">
+                      <span className="font-bold text-base text-game-rust">${game.price}/día</span>
+                      <ChevronRight className="w-4 h-4 text-game-gold" />
                     </div>
                   </div>
                 </div>
