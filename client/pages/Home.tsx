@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Star } from "lucide-react";
 import { games, categories } from "@/data/games";
 import Layout from "@/components/Layout";
+import Carousel from "@/components/Carousel";
 
 export default function Home() {
   const featuredGames = games.slice(0, 3);
