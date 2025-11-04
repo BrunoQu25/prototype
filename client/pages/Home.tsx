@@ -29,7 +29,7 @@ export default function Home() {
           </h2>
           <Carousel>
             {featuredGames.map((game) => (
-              <Link key={game.id} to={`/product/${game.id}`} className="flex-shrink-0 w-full sm:basis-1/2 lg:basis-1/3">
+              <Link key={game.id} to={`/product/${game.id}`} className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-2">
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 border-2 border-game-gold border-opacity-50 cursor-pointer h-full">
                   {/* Game Image Area */}
                   <div className="bg-gradient-to-br from-game-gold to-amber-200 h-48 flex items-center justify-center text-8xl animate-float">
