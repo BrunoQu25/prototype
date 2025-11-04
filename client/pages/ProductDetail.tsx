@@ -1,5 +1,12 @@
 import { useParams, Link } from "react-router-dom";
-import { Heart, ShoppingCart, Clock, Users, ChevronRight, Star } from "lucide-react";
+import {
+  Heart,
+  ShoppingCart,
+  Clock,
+  Users,
+  ChevronRight,
+  Star,
+} from "lucide-react";
 import { useState } from "react";
 import { games } from "@/data/games";
 import Layout from "@/components/Layout";
@@ -14,7 +21,10 @@ export default function ProductDetail() {
       <Layout>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
           <p className="text-game-brown text-lg">Juego no encontrado</p>
-          <Link to="/" className="text-game-rust mt-4 inline-block hover:underline">
+          <Link
+            to="/"
+            className="text-game-rust mt-4 inline-block hover:underline"
+          >
             Volver a inicio
           </Link>
         </div>
@@ -52,7 +62,9 @@ export default function ProductDetail() {
               <div className="inline-block px-4 py-2 bg-game-rust bg-opacity-10 border border-game-rust rounded-full text-sm font-semibold text-game-rust mb-4">
                 {game.category}
               </div>
-              <h1 className="text-4xl font-bold text-game-brown mb-3">{game.title}</h1>
+              <h1 className="text-4xl font-bold text-game-brown mb-3">
+                {game.title}
+              </h1>
 
               {/* Rating */}
               <div className="flex items-center gap-3 mb-4">
@@ -61,19 +73,27 @@ export default function ProductDetail() {
                     <Star
                       key={i}
                       className={`w-5 h-5 ${
-                        i < Math.floor(game.rating) ? "fill-game-gold text-game-gold" : "text-game-brown text-opacity-20"
+                        i < Math.floor(game.rating)
+                          ? "fill-game-gold text-game-gold"
+                          : "text-game-brown text-opacity-20"
                       }`}
                     />
                   ))}
                 </div>
-                <span className="font-bold text-lg text-game-brown">{game.rating}</span>
-                <span className="text-sm text-game-brown text-opacity-50">({game.reviews} reseñas)</span>
+                <span className="font-bold text-lg text-game-brown">
+                  {game.rating}
+                </span>
+                <span className="text-sm text-game-brown text-opacity-50">
+                  ({game.reviews} reseñas)
+                </span>
               </div>
             </div>
 
             {/* Description */}
             <div>
-              <h2 className="text-xl font-bold text-game-brown mb-3">Descripción</h2>
+              <h2 className="text-xl font-bold text-game-brown mb-3">
+                Descripción
+              </h2>
               <p className="text-game-brown text-opacity-75 leading-relaxed">
                 {game.description}
               </p>
@@ -111,7 +131,9 @@ export default function ProductDetail() {
             {/* Price and Action Buttons */}
             <div className="bg-gradient-to-r from-game-rust to-orange-600 rounded-2xl p-6 flex flex-col gap-4">
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-white">${game.price}</span>
+                <span className="text-4xl font-bold text-white">
+                  ${game.price}
+                </span>
                 <span className="text-white text-opacity-90">/día</span>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -123,7 +145,9 @@ export default function ProductDetail() {
                       : "bg-transparent text-white border-white hover:bg-white hover:bg-opacity-10"
                   }`}
                 >
-                  <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
+                  <Heart
+                    className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`}
+                  />
                   <span className="hidden sm:inline">
                     {isWishlisted ? "En" : "Agregar a"} Lista
                   </span>

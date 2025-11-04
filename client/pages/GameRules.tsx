@@ -14,7 +14,10 @@ export default function GameRules() {
       <Layout>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
           <p className="text-game-brown text-lg">Juego no encontrado</p>
-          <Link to="/" className="text-game-rust mt-4 inline-block hover:underline">
+          <Link
+            to="/"
+            className="text-game-rust mt-4 inline-block hover:underline"
+          >
             Volver a inicio
           </Link>
         </div>
@@ -31,15 +34,22 @@ export default function GameRules() {
             Inicio
           </Link>
           <span>›</span>
-          <Link to={`/product/${id}`} className="hover:text-game-brown whitespace-nowrap">
+          <Link
+            to={`/product/${id}`}
+            className="hover:text-game-brown whitespace-nowrap"
+          >
             {game.title}
           </Link>
           <span>›</span>
-          <span className="text-game-brown font-semibold whitespace-nowrap">Sobre tu juego</span>
+          <span className="text-game-brown font-semibold whitespace-nowrap">
+            Sobre tu juego
+          </span>
         </div>
 
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-game-brown mb-2">Sobre tu juego</h1>
+          <h1 className="text-4xl font-bold text-game-brown mb-2">
+            Sobre tu juego
+          </h1>
           <p className="text-game-brown text-opacity-60">{game.title}</p>
         </div>
 
@@ -56,20 +66,26 @@ export default function GameRules() {
 
             {/* Video Explicativo */}
             <div>
-              <h3 className="text-lg font-bold text-game-brown mb-3">Video Explicativo</h3>
+              <h3 className="text-lg font-bold text-game-brown mb-3">
+                Video Explicativo
+              </h3>
               <div className="bg-gradient-to-br from-game-navy to-blue-900 rounded-2xl p-8 aspect-video flex items-center justify-center border-4 border-game-navy border-opacity-30 hover:shadow-lg transition">
                 <div className="text-center">
                   <div className="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center mx-auto mb-4">
                     <span className="text-3xl">▶</span>
                   </div>
-                  <p className="text-white text-opacity-90 font-semibold">Video del juego</p>
+                  <p className="text-white text-opacity-90 font-semibold">
+                    Video del juego
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Game Rules Info */}
             <div className="bg-game-cream rounded-2xl p-6 border-2 border-game-brown border-opacity-10">
-              <h3 className="text-lg font-bold text-game-brown mb-4">Información del Juego</h3>
+              <h3 className="text-lg font-bold text-game-brown mb-4">
+                Información del Juego
+              </h3>
               <div className="space-y-3 text-game-brown">
                 <div className="flex items-start gap-3">
                   <span className="text-xl mt-0.5">⏱️</span>
@@ -114,13 +130,16 @@ export default function GameRules() {
                 </div>
                 <div>
                   <p className="font-bold text-game-brown">Consultor</p>
-                  <p className="text-sm text-game-brown text-opacity-60">Explicación de reglas</p>
+                  <p className="text-sm text-game-brown text-opacity-60">
+                    Explicación de reglas
+                  </p>
                 </div>
               </div>
               <div className="bg-game-cream rounded-xl p-4 text-game-brown text-opacity-85 leading-relaxed">
                 <p className="mb-3">{game.rules.text}</p>
                 <p className="text-sm italic text-game-brown text-opacity-60">
-                  Haz preguntas en la sección de comentarios si algo no es claro.
+                  Haz preguntas en la sección de comentarios si algo no es
+                  claro.
                 </p>
               </div>
             </div>

@@ -29,7 +29,11 @@ export default function Home() {
           </h2>
           <Carousel>
             {games.map((game) => (
-              <Link key={game.id} to={`/product/${game.id}`} className="flex-shrink-0 w-1/3 px-1.5 sm:px-2 min-w-0">
+              <Link
+                key={game.id}
+                to={`/product/${game.id}`}
+                className="flex-shrink-0 w-1/3 px-1.5 sm:px-2 min-w-0"
+              >
                 <div className="bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all transform hover:-translate-y-1 sm:hover:-translate-y-2 border-2 border-game-gold border-opacity-50 cursor-pointer h-full flex flex-col">
                   {/* Game Image Area */}
                   <div className="bg-gradient-to-br from-game-gold to-amber-200 h-24 sm:h-48 flex items-center justify-center text-4xl sm:text-8xl animate-float flex-shrink-0">
@@ -49,13 +53,19 @@ export default function Home() {
                           <Star
                             key={i}
                             className={`w-2 h-2 sm:w-3 sm:h-3 ${
-                              i < Math.floor(game.rating) ? "fill-game-gold text-game-gold" : "text-game-brown text-opacity-20"
+                              i < Math.floor(game.rating)
+                                ? "fill-game-gold text-game-gold"
+                                : "text-game-brown text-opacity-20"
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="text-xs font-semibold text-game-brown hidden sm:inline">{game.rating}</span>
-                      <span className="text-xs text-game-brown text-opacity-50 hidden sm:inline">({game.reviews})</span>
+                      <span className="text-xs font-semibold text-game-brown hidden sm:inline">
+                        {game.rating}
+                      </span>
+                      <span className="text-xs text-game-brown text-opacity-50 hidden sm:inline">
+                        ({game.reviews})
+                      </span>
                     </div>
 
                     {/* Category Badge - Improved Contrast */}
@@ -65,7 +75,9 @@ export default function Home() {
 
                     {/* Footer */}
                     <div className="flex items-center justify-between pt-1.5 sm:pt-2 border-t border-game-brown border-opacity-10 mt-auto">
-                      <span className="font-bold text-xs sm:text-base text-game-rust">${game.price}/d</span>
+                      <span className="font-bold text-xs sm:text-base text-game-rust">
+                        ${game.price}/d
+                      </span>
                       <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-game-gold" />
                     </div>
                   </div>
@@ -103,12 +115,16 @@ export default function Home() {
                           <Star
                             key={i}
                             className={`w-3 h-3 ${
-                              i < Math.floor(game.rating) ? "fill-game-gold text-game-gold" : "text-game-brown text-opacity-20"
+                              i < Math.floor(game.rating)
+                                ? "fill-game-gold text-game-gold"
+                                : "text-game-brown text-opacity-20"
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="text-xs font-semibold text-game-brown">{game.rating}</span>
+                      <span className="text-xs font-semibold text-game-brown">
+                        {game.rating}
+                      </span>
                     </div>
 
                     {/* Category Badge - Improved Contrast */}
@@ -118,7 +134,9 @@ export default function Home() {
 
                     {/* Footer */}
                     <div className="flex items-center justify-between pt-2 border-t border-game-brown border-opacity-10">
-                      <span className="font-bold text-sm text-game-rust">${game.price}/día</span>
+                      <span className="font-bold text-sm text-game-rust">
+                        ${game.price}/día
+                      </span>
                       <ChevronRight className="w-4 h-4 text-game-sage" />
                     </div>
                   </div>

@@ -16,7 +16,10 @@ export default function GameReviews() {
       <Layout>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
           <p className="text-game-brown text-lg">Juego no encontrado</p>
-          <Link to="/" className="text-game-rust mt-4 inline-block hover:underline">
+          <Link
+            to="/"
+            className="text-game-rust mt-4 inline-block hover:underline"
+          >
             Volver a inicio
           </Link>
         </div>
@@ -33,27 +36,42 @@ export default function GameReviews() {
             Inicio
           </Link>
           <span>›</span>
-          <Link to={`/product/${id}`} className="hover:text-game-brown whitespace-nowrap">
+          <Link
+            to={`/product/${id}`}
+            className="hover:text-game-brown whitespace-nowrap"
+          >
             {game.title}
           </Link>
           <span>›</span>
-          <span className="text-game-brown font-semibold whitespace-nowrap">Reseñas</span>
+          <span className="text-game-brown font-semibold whitespace-nowrap">
+            Reseñas
+          </span>
         </div>
 
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-game-brown mb-3">Cuéntanos Tu Experiencia</h1>
-          <p className="text-game-brown text-opacity-60 text-lg">Reseñas sobre {game.title}</p>
+          <h1 className="text-4xl font-bold text-game-brown mb-3">
+            Cuéntanos Tu Experiencia
+          </h1>
+          <p className="text-game-brown text-opacity-60 text-lg">
+            Reseñas sobre {game.title}
+          </p>
         </div>
 
         {/* Overall Rating Summary */}
         <div className="bg-gradient-to-r from-game-gold to-amber-200 rounded-2xl p-8 mb-12 border-4 border-game-gold border-opacity-30">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
-              <p className="text-game-brown text-opacity-70 text-sm font-semibold mb-2">Calificación General</p>
+              <p className="text-game-brown text-opacity-70 text-sm font-semibold mb-2">
+                Calificación General
+              </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-bold text-game-brown">{game.rating}</span>
-                <span className="text-2xl text-game-brown text-opacity-70">/5</span>
+                <span className="text-5xl font-bold text-game-brown">
+                  {game.rating}
+                </span>
+                <span className="text-2xl text-game-brown text-opacity-70">
+                  /5
+                </span>
               </div>
             </div>
             <div className="flex gap-1">
@@ -61,7 +79,9 @@ export default function GameReviews() {
                 <Star
                   key={i}
                   className={`w-8 h-8 ${
-                    i < Math.floor(game.rating) ? "fill-game-rust text-game-rust" : "text-game-brown text-opacity-20"
+                    i < Math.floor(game.rating)
+                      ? "fill-game-rust text-game-rust"
+                      : "text-game-brown text-opacity-20"
                   }`}
                 />
               ))}
@@ -74,7 +94,9 @@ export default function GameReviews() {
 
         {/* Reviews List */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-game-brown mb-6">Reseñas de Usuarios</h2>
+          <h2 className="text-2xl font-bold text-game-brown mb-6">
+            Reseñas de Usuarios
+          </h2>
           <div className="space-y-6">
             {game.reviews_list.map((review, idx) => (
               <div
@@ -84,15 +106,21 @@ export default function GameReviews() {
                 {/* Review Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="font-bold text-xl text-game-brown">{review.name}</h3>
-                    <p className="text-sm text-game-brown text-opacity-60">{review.role}</p>
+                    <h3 className="font-bold text-xl text-game-brown">
+                      {review.name}
+                    </h3>
+                    <p className="text-sm text-game-brown text-opacity-60">
+                      {review.role}
+                    </p>
                   </div>
                   <div className="flex gap-0.5">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
                         className={`w-5 h-5 ${
-                          i < review.rating ? "fill-game-gold text-game-gold" : "text-game-brown text-opacity-20"
+                          i < review.rating
+                            ? "fill-game-gold text-game-gold"
+                            : "text-game-brown text-opacity-20"
                         }`}
                       />
                     ))}
@@ -106,7 +134,9 @@ export default function GameReviews() {
 
                 {/* Agree/Disagree */}
                 <div className="flex items-center gap-3 pt-4 border-t border-game-brown border-opacity-10">
-                  <span className="text-sm text-game-brown text-opacity-60">¿Estás de acuerdo?</span>
+                  <span className="text-sm text-game-brown text-opacity-60">
+                    ¿Estás de acuerdo?
+                  </span>
                   <button className="p-2 rounded-lg border-2 border-game-sage hover:bg-game-sage hover:text-white transition text-game-sage">
                     <ThumbsUp className="w-4 h-4" />
                   </button>
@@ -131,11 +161,15 @@ export default function GameReviews() {
             </button>
           ) : (
             <div className="bg-white rounded-2xl p-8 border-4 border-game-rust border-opacity-30">
-              <h3 className="text-2xl font-bold text-game-brown mb-6">Comparte Tu Experiencia</h3>
+              <h3 className="text-2xl font-bold text-game-brown mb-6">
+                Comparte Tu Experiencia
+              </h3>
 
               {/* Rating Input */}
               <div className="mb-6">
-                <label className="block text-game-brown font-semibold mb-3">Tu Calificación</label>
+                <label className="block text-game-brown font-semibold mb-3">
+                  Tu Calificación
+                </label>
                 <div className="flex gap-2">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <button
@@ -157,7 +191,9 @@ export default function GameReviews() {
 
               {/* Review Text */}
               <div className="mb-6">
-                <label className="block text-game-brown font-semibold mb-3">Tu Reseña</label>
+                <label className="block text-game-brown font-semibold mb-3">
+                  Tu Reseña
+                </label>
                 <textarea
                   value={newReview}
                   onChange={(e) => setNewReview(e.target.value)}

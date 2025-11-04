@@ -1,5 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-import { Heart, ShoppingCart, Menu, Home, Gamepad2, Plus, MoreHorizontal, User } from "lucide-react";
+import {
+  Heart,
+  ShoppingCart,
+  Menu,
+  Home,
+  Gamepad2,
+  Plus,
+  MoreHorizontal,
+  User,
+} from "lucide-react";
 import { useState } from "react";
 
 interface LayoutProps {
@@ -15,14 +24,21 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-game-cream to-amber-50 flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white shadow-md border-b-4 border-game-rust" style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}>
+      <header
+        className="sticky top-0 z-40 bg-white shadow-md border-b-4 border-game-rust"
+        style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}
+      >
         <div className="px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
               <span className="text-2xl">🎲</span>
-              <span className="font-bold text-xl text-game-brown hidden sm:inline">TableTop Quest</span>
-              <span className="font-bold text-xl text-game-brown sm:hidden">TTQ</span>
+              <span className="font-bold text-xl text-game-brown hidden sm:inline">
+                TableTop Quest
+              </span>
+              <span className="font-bold text-xl text-game-brown sm:hidden">
+                TTQ
+              </span>
             </Link>
 
             {/* Search Bar - Hidden on mobile */}
@@ -74,7 +90,9 @@ export default function Layout({ children }: LayoutProps) {
               <Link
                 to="/"
                 className={`px-4 py-2 rounded-lg transition ${
-                  isActive("/") ? "bg-game-rust text-white" : "hover:bg-game-cream text-game-brown"
+                  isActive("/")
+                    ? "bg-game-rust text-white"
+                    : "hover:bg-game-cream text-game-brown"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -83,7 +101,9 @@ export default function Layout({ children }: LayoutProps) {
               <Link
                 to="/product/1"
                 className={`px-4 py-2 rounded-lg transition ${
-                  isActive("/product/1") ? "bg-game-rust text-white" : "hover:bg-game-cream text-game-brown"
+                  isActive("/product/1")
+                    ? "bg-game-rust text-white"
+                    : "hover:bg-game-cream text-game-brown"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -98,12 +118,17 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1 overflow-y-auto">{children}</main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
         <div className="flex justify-around">
           <Link
             to="/"
             className={`flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition ${
-              isActive("/") ? "text-game-rust" : "text-game-brown hover:text-game-rust"
+              isActive("/")
+                ? "text-game-rust"
+                : "text-game-brown hover:text-game-rust"
             }`}
           >
             <Home className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
