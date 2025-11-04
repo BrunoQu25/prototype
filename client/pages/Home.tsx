@@ -21,15 +21,15 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Featured Games */}
+        {/* Featured Games - Carousel */}
         <div className="mb-16">
           <h2 className="text-2xl font-bold text-game-brown mb-6 flex items-center gap-2">
             <span className="text-3xl">✨</span>
             Destacados
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Carousel>
             {featuredGames.map((game) => (
-              <Link key={game.id} to={`/product/${game.id}`}>
+              <Link key={game.id} to={`/product/${game.id}`} className="flex-shrink-0 w-full sm:basis-1/2 lg:basis-1/3">
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 border-2 border-game-gold border-opacity-50 cursor-pointer h-full">
                   {/* Game Image Area */}
                   <div className="bg-gradient-to-br from-game-gold to-amber-200 h-48 flex items-center justify-center text-8xl animate-float">
@@ -77,7 +77,7 @@ export default function Home() {
                 </div>
               </Link>
             ))}
-          </div>
+          </Carousel>
         </div>
 
         {/* Recently Added */}
