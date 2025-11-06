@@ -17,7 +17,10 @@ export default function AIChat() {
 
   useEffect(() => {
     // scroll to bottom when messages change
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [messages, isOpen]);
 
   const sendMessage = async () => {
@@ -29,13 +32,21 @@ export default function AIChat() {
     setLoading(true);
 
     // Mock IA response (replace with real API call later)
-    const placeholder: Message = { id: nextId.current++, role: "assistant", text: "La IA está escribiendo..." };
+    const placeholder: Message = {
+      id: nextId.current++,
+      role: "assistant",
+      text: "La IA está escribiendo...",
+    };
     setMessages((m) => [...m, placeholder]);
 
     // simulate processing time
     setTimeout(() => {
       setMessages((m) =>
-        m.map((msg) => (msg.id === placeholder.id ? { ...msg, text: `Respuesta de la IA: ${text}` } : msg))
+        m.map((msg) =>
+          msg.id === placeholder.id
+            ? { ...msg, text: `Respuesta de la IA: ${text}` }
+            : msg,
+        ),
       );
       setLoading(false);
     }, 900);
@@ -51,8 +62,12 @@ export default function AIChat() {
         <div className="flex items-center gap-3">
           <MessageSquare className="w-6 h-6 text-game-brown" />
           <div>
-            <div className="font-bold text-game-brown">Preguntale a la IA</div>
-            <div className="text-xs text-game-brown text-opacity-60">Haz una pregunta aquí</div>
+            <div className="font-bold text-game-brown">
+              Responde tus dudas sobre las reglas
+            </div>
+            <div className="text-xs text-game-brown text-opacity-60">
+              Haz una pregunta aquí
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -70,22 +85,36 @@ export default function AIChat() {
             title={isOpen ? "Minimizar" : "Expandir"}
             className="p-2 rounded-md bg-transparent border border-game-brown border-opacity-0 hover:border-opacity-10 transition"
           >
-            {isOpen ? <X className="w-4 h-4 text-game-brown" /> : <ChevronDown className="w-4 h-4 text-game-brown" />}
+            {isOpen ? (
+              <X className="w-4 h-4 text-game-brown" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-game-brown" />
+            )}
           </button>
         </div>
       </div>
 
       {isOpen && (
         <div className="flex flex-col">
-          <div ref={scrollRef} className="px-4 py-3 max-h-56 overflow-y-auto space-y-3 scrollbar-hide">
+          <div
+            ref={scrollRef}
+            className="px-4 py-3 max-h-56 overflow-y-auto space-y-3 scrollbar-hide"
+          >
             {messages.length === 0 && (
-              <div className="text-sm text-game-brown text-opacity-60">Sin preguntas aún. Empieza preguntando algo.</div>
+              <div className="text-sm text-game-brown text-opacity-60">
+                Sin preguntas aún. Empieza preguntando algo.
+              </div>
             )}
             {messages.map((m) => (
-              <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                key={m.id}
+                className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+              >
                 <div
                   className={`max-w-[80%] px-3 py-2 rounded-lg text-sm ${
-                    m.role === "user" ? "bg-game-cream text-game-brown" : "bg-game-rust text-white"
+                    m.role === "user"
+                      ? "bg-game-cream text-game-brown"
+                      : "bg-game-rust text-white"
                   }`}
                 >
                   {m.text}

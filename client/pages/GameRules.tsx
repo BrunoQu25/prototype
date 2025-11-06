@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 
 export default function GameRules() {
   const { id } = useParams<{ id: string }>();
-  
+
   const game = games.find((g) => g.id === parseInt(id || "1"));
 
   if (!game) {
@@ -41,14 +41,13 @@ export default function GameRules() {
             {game.title}
           </Link>
           <span>›</span>
-          
+
           <span className="text-game-brown font-semibold whitespace-nowrap">
             Sobre tu juego
           </span>
         </div>
 
         <div className="mb-10">
-          
           <h1 className="text-4xl font-bold text-game-brown mb-2">
             Sobre tu juego
           </h1>
@@ -99,18 +98,17 @@ export default function GameRules() {
               <h3 className="text-lg font-bold text-game-brown mb-2">
                 Video Explicativo
               </h3>
-              <div className="bg-gradient-to-br from-game-navy to-blue-900 rounded-2xl p-8 aspect-video flex items-center justify-center border-4 border-game-navy border-opacity-30 hover:shadow-lg transition">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center mx-auto mb-4">
-                    <span className="text-3xl">▶</span>
-                  </div>
-                  <p className="text-white text-opacity-90 font-semibold">
-                    Video del juego
-                  </p>
-                </div>
+              <div className="aspect-video rounded-2xl overflow-hidden">
+                <iframe
+                  src={game.rules.video} // e.g. https://www.youtube.com/embed?listType=search&list=...
+                  title={`Cómo jugar ${game.title}`}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
               </div>
             </div>
-          
 
             {/* Right: Transcription & Notes */}
             {/* Transcription Section */}
@@ -146,8 +144,6 @@ export default function GameRules() {
             <div>
               <AIChat />
             </div>
-
-            
           </div>
         </div>
       </div>

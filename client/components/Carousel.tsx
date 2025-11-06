@@ -1,79 +1,68 @@
-import { useRef, useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState, PropsWithChildren } from "react";
 
-interface CarouselProps {
-  children: React.ReactNode;
-}
+type CarouselProps = {
+  autoPlay?: boolean;
+  interval?: number; // ms
+  pauseOnHover?: boolean;
+  loop?: boolean;
+  className?: string;
+};
 
-export default function Carousel({ children }: CarouselProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScroll = () => {
-    if (containerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
+export default function Carousel({
+  children,
+  autoPlay = true,
+  interval = 4000,
+  pauseOnHover = true,
+  loop = true,
+  className = "",
+}: PropsWithChildren<CarouselProps>) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
-    checkScroll();
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", checkScroll);
-      return () => container.removeEventListener("scroll", checkScroll);
-    }
-  }, []);
+    if (!autoPlay) return;
+    const el = ref.current;
+    if (!el) return;
 
-  const scroll = (direction: "left" | "right") => {
-    if (containerRef.current) {
-      // Calculate scroll amount based on item width (approximately 1/3 of container width + gap)
-      const container = containerRef.current;
-      const itemWidth = container.offsetWidth / 3 + 16; // 16px for gap
-      const scrollAmount = itemWidth;
-      const newScrollLeft =
-        container.scrollLeft +
-        (direction === "left" ? -scrollAmount : scrollAmount);
-      container.scrollTo({
-        left: newScrollLeft,
-        behavior: "smooth",
-      });
-    }
-  };
+    const getSlideWidth = () => {
+      // Busca cualquier hijo marcado como data-slide
+      const slide =
+        (el.querySelector<HTMLElement>("[data-slide]") as HTMLElement | null) ||
+        (el.firstElementChild as HTMLElement | null);
+      if (!slide) return 0;
+      const styles = getComputedStyle(el);
+      const gap = parseFloat(styles.columnGap || styles.gap || "0") || 0;
+      return slide.clientWidth + gap;
+    };
+
+    const tick = () => {
+      if (pauseOnHover && hovered) return;
+      const slideW = getSlideWidth();
+      if (!slideW) return;
+      const max = el.scrollWidth - el.clientWidth;
+      const next = Math.min(el.scrollLeft + slideW, max);
+      if (el.scrollLeft >= max - 2) {
+        if (loop) el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollTo({ left: next, behavior: "smooth" });
+      }
+    };
+
+    const id = window.setInterval(tick, interval);
+    return () => window.clearInterval(id);
+  }, [autoPlay, interval, pauseOnHover, loop, hovered]);
 
   return (
-    <div className="relative group">
+    <div className="relative">
       <div
-        ref={containerRef}
-        className="overflow-x-auto scrollbar-hide"
+        ref={ref}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+            className={`flex items-stretch overflow-x-auto snap-x snap-mandatory scroll-smooth gap-3 ${className} scrollbar-hide`}
         style={{ scrollBehavior: "smooth" }}
       >
-        <div className="flex gap-4 pb-2">{children}</div>
+        {children}
       </div>
-
-      {/* Left Arrow */}
-      {canScrollLeft && (
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-6 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all"
-          aria-label="Previous"
-        >
-          <ChevronLeft className="w-5 h-5 text-game-rust" />
-        </button>
-      )}
-
-      {/* Right Arrow */}
-      {canScrollRight && (
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-6 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all"
-          aria-label="Next"
-        >
-          <ChevronRight className="w-5 h-5 text-game-rust" />
-        </button>
-      )}
     </div>
   );
 }
