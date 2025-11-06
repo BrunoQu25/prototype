@@ -27,7 +27,8 @@ export const games: Game[] = [
     id: 1,
     title: "Catan",
     category: "Estrategia",
-    image: "🏰",
+    image:
+      "https://www.mosca.com.uy/media/catalog/product/4/8/4852725-1_1.jpg?height=700&width=700",
     rating: 4.8,
     reviews: 156,
     description:
@@ -37,7 +38,8 @@ export const games: Game[] = [
     difficulty: "Medio",
     price: 45,
     rules: {
-      video: "https://example.com/catan-rules",
+      video:
+        "https://www.youtube-nocookie.com/embed?listType=search&list=c%C3%B3mo+jugar+Catan",
       text: "Cada turno, los jugadores colocan asentamientos y carreteras, comercian recursos y construyen ciudades. El primer jugador en alcanzar 10 puntos gana.",
     },
     reviews_list: [
@@ -61,7 +63,8 @@ export const games: Game[] = [
     id: 2,
     title: "Ticket to Ride",
     category: "Estrategia",
-    image: "🚂",
+    image:
+      "https://image.cdn1.buscalibre.com/529b8e15b896ab3b4d001c69.RS500x500.jpg",
     rating: 4.6,
     reviews: 203,
     description:
@@ -71,7 +74,7 @@ export const games: Game[] = [
     difficulty: "Fácil",
     price: 50,
     rules: {
-      video: "https://example.com/ticket-rules",
+      video: "https://www.youtube-nocookie.com/embed/GcwS4XdbjOk",
       text: "Los jugadores dibujan cartas de ruta y usan tarjetas de color para reivindicar rutas entre ciudades. Gana quien completa las rutas más valiosas.",
     },
     reviews_list: [
@@ -87,8 +90,9 @@ export const games: Game[] = [
   {
     id: 3,
     title: "Pandemic",
-    category: "Coop",
-    image: "🏥",
+    category: "Cooperativo",
+    image:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_674534-MLU71367656852_082023-F.webp",
     rating: 4.7,
     reviews: 189,
     description:
@@ -98,7 +102,7 @@ export const games: Game[] = [
     difficulty: "Medio",
     price: 48,
     rules: {
-      video: "https://example.com/pandemic-rules",
+      video: "https://www.youtube-nocookie.com/embed/C1M-87Xjr5o",
       text: "Los jugadores colaboran para encontrar curas de enfermedades antes de que se propaguen. Todos ganan o pierden juntos.",
     },
     reviews_list: [
@@ -114,7 +118,8 @@ export const games: Game[] = [
     id: 4,
     title: "Carcassonne",
     category: "Estrategia",
-    image: "🏯",
+    image:
+      "https://f.fcdn.app/imgs/b67574/www.losreyesmagos.com.uy/reymuy/2550/original/catalogo/22323_22323_1/2000-2000/carcassonne-juego-de-mesa-carcassonne-juego-de-mesa.jpg",
     rating: 4.5,
     reviews: 142,
     description:
@@ -124,7 +129,7 @@ export const games: Game[] = [
     difficulty: "Fácil",
     price: 35,
     rules: {
-      video: "https://example.com/carcassonne-rules",
+      video: "https://www.youtube-nocookie.com/embed/zIeyB3ykf1s",
       text: "Cada turno coloca una ficha en el tablero formando ciudades, caminos y monasterios. Los puntos se ganan por completar formaciones.",
     },
     reviews_list: [
@@ -140,7 +145,8 @@ export const games: Game[] = [
     id: 5,
     title: "Splendor",
     category: "Estrategia",
-    image: "💎",
+    image:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_942518-MLA96179657775_102025-F.webp",
     rating: 4.6,
     reviews: 178,
     description:
@@ -150,7 +156,7 @@ export const games: Game[] = [
     difficulty: "Fácil",
     price: 40,
     rules: {
-      video: "https://example.com/splendor-rules",
+      video: "https://www.youtube-nocookie.com/embed/5enAMA8zq3E",
       text: "Colecciona gemas y compra desarrollos para aumentar tu motor de producción. El primer jugador en alcanzar 15 puntos gana.",
     },
     reviews_list: [
@@ -158,7 +164,7 @@ export const games: Game[] = [
         name: "Elena",
         role: "Experimentada",
         rating: 5,
-        comment: "Mecanáticas hermosas y muy balanceado. Una joya.",
+        comment: "Mecanísticas hermosas y muy balanceado. Una joya.",
       },
     ],
   },
@@ -166,7 +172,8 @@ export const games: Game[] = [
     id: 6,
     title: "Azul",
     category: "Estrategia",
-    image: "🟦",
+    image:
+      "https://upload.wikimedia.org/wikipedia/en/2/23/Picture_of_Azul_game_box.jpg",
     rating: 4.7,
     reviews: 167,
     description:
@@ -176,7 +183,7 @@ export const games: Game[] = [
     difficulty: "Fácil",
     price: 38,
     rules: {
-      video: "https://example.com/azul-rules",
+      video: "https://www.youtube-nocookie.com/embed/qhfPNSNRJZ0",
       text: "Toma fichas de azulejos del centro y colócalas en tu tablero. Completa filas para obtener puntos. El juego es puro, elegante y estratégico.",
     },
     reviews_list: [
@@ -192,7 +199,7 @@ export const games: Game[] = [
 
 export const categories = [
   { id: 1, name: "Estrategia", icon: "♟️" },
-  { id: 2, name: "Coop", icon: "🤝" },
+  { id: 2, name: "Cooperativo", icon: "🤝" },
   { id: 3, name: "Familiar", icon: "👨‍👩‍👧‍👦" },
-  { id: 4, name: "Party", icon: "🎉" },
+  { id: 4, name: "Fiesta", icon: "🎉" },
 ];

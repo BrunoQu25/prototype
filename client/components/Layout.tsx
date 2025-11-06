@@ -34,7 +34,7 @@ export default function Layout({ children }: LayoutProps) {
             <Link to="/" className="flex items-center gap-2">
               <span className="text-2xl">🎲</span>
               <span className="font-bold text-xl text-game-brown hidden sm:inline">
-                TableTop Quest
+                Table Hopping
               </span>
               <span className="font-bold text-xl text-game-brown sm:hidden">
                 TTQ
@@ -143,12 +143,9 @@ export default function Layout({ children }: LayoutProps) {
             className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust"
           >
             <Plus className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-            <span className="text-xs font-medium">Agregar</span>
+            <span className="text-xs font-medium">Publicar</span>
           </Link>
-          <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
-            <MoreHorizontal className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-            <span className="text-xs font-medium">Más</span>
-          </button>
+
           <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
             <User className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
             <span className="text-xs font-medium">Perfil</span>

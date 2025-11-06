@@ -23,10 +23,10 @@ export default function ProductDetail() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
           <p className="text-game-brown text-lg">Juego no encontrado</p>
           <Link
-            to="/"
-            className="text-game-rust mt-4 inline-block hover:underline"
+            to={`/?categoria=${encodeURIComponent(game.category)}`}
+            className="underline text-game-brown"
           >
-            Volver a inicio
+            {game.category}
           </Link>
         </div>
       </Layout>
@@ -42,8 +42,6 @@ export default function ProductDetail() {
             Inicio
           </Link>
           <span>›</span>
-          <span>Categoría</span>
-          <span>›</span>
           <span className="text-game-brown font-semibold">{game.title}</span>
         </div>
 
@@ -51,8 +49,12 @@ export default function ProductDetail() {
           {/* Left: Product Image */}
           <div className="flex flex-col gap-4">
             {/* Main Image */}
-            <div className="bg-gradient-to-br from-game-gold to-amber-200 rounded-3xl p-12 aspect-square flex items-center justify-center shadow-xl border-4 border-game-gold border-opacity-30 animate-float">
-              <span className="text-9xl">{game.image}</span>
+            <div className="bg-gradient-to-br from-game-gold to-amber-200 rounded-3xl p-12 aspect-square flex items-center justify-center shadow-xl border-4 border-game-gold border-opacity-30">
+              <img
+                src={game.image}
+                alt={game.title}
+                className="w-full h-full object-contain"
+              />
             </div>
           </div>
 
@@ -91,7 +93,9 @@ export default function ProductDetail() {
             </div>
             {/* Propietario (owner card) */}
             <div>
-              <h2 className="text-xl font-bold text-game-brown mb-3">Propietario</h2>
+              <h2 className="text-xl font-bold text-game-brown mb-3">
+                Propietario
+              </h2>
 
               {/* Owner Card */}
               {(() => {
@@ -103,7 +107,7 @@ export default function ProductDetail() {
                   .slice(0, 2)
                   .join("");
                 const ownerLocation = "Montevideo";
-                const responseTime = "~15m";
+                const responseTime = "Responde cada 15 minutos";
                 const ownerRating = 4.9;
 
                 return (
@@ -114,10 +118,14 @@ export default function ProductDetail() {
                       </div>
                       <div>
                         <p className="font-bold text-game-brown">{ownerName}</p>
-                        <p className="text-sm text-game-brown text-opacity-60">{ownerLocation} · {responseTime} response</p>
+                        <p className="text-sm text-game-brown text-opacity-60">
+                          {ownerLocation} · {responseTime}
+                        </p>
                         <div className="flex items-center gap-1 mt-1">
                           <Star className="w-4 h-4 text-game-gold" />
-                          <span className="text-sm font-semibold text-game-brown">{ownerRating}</span>
+                          <span className="text-sm font-semibold text-game-brown">
+                            {ownerRating}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -144,7 +152,9 @@ export default function ProductDetail() {
 
             {/* Rules */}
             <div className="bg-game-cream rounded-2xl p-6 border-2 border-game-brown border-opacity-10">
-              <h3 className="text-lg font-bold text-game-brown mb-4">Sobre el juego</h3>
+              <h3 className="text-lg font-bold text-game-brown mb-4">
+                Sobre el juego
+              </h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-game-brown">
                   <Clock className="w-5 h-5 text-game-rust flex-shrink-0" />
