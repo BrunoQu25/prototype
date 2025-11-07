@@ -28,6 +28,8 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
+      "@/state/*": ["./state/*"],
+      "@/types/*": ["./types/*"],
       "@/*": ["./client/*"],
       "@shared/*": ["./shared/*"]
     }

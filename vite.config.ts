@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     fs: {
-      allow: ["./client", "./shared"],
+      allow: ["./client", "./shared", "./state", "./types"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
     },
   },
@@ -18,10 +18,12 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [react(), expressPlugin()],
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./client"),
-      "@shared": path.resolve(__dirname, "./shared"),
-    },
+    alias: [
+      { find: "@/state", replacement: path.resolve(__dirname, "./state") },
+      { find: "@/types", replacement: path.resolve(__dirname, "./types") },
+      { find: "@shared", replacement: path.resolve(__dirname, "./shared") },
+      { find: "@", replacement: path.resolve(__dirname, "./client") },
+    ],
   },
 }));
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
+import { toast } from "@/components/ui/use-toast";
 
 export default function RentalDelivery() {
   const { id } = useParams<{ id: string }>();
@@ -14,10 +15,17 @@ export default function RentalDelivery() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
-    if (method === "delivery" && !address) return alert("Ingrese una dirección para delivery");
+    if (method === "delivery" && !address.trim()) {
+      toast({
+        title: "Dirección requerida",
+        description: "Por favor ingresa una dirección para la entrega.",
+      });
+      return;
+    }
 
-    navigate(`/product/${id}/rental/confirm`, { state: { ...state, method, payment, address } });
+    navigate(`/product/${id}/rental/confirm`, {
+      state: { ...state, method, payment, address },
+    });
   };
 
   return (

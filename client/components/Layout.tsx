@@ -1,22 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import {
-  Heart,
-  ShoppingCart,
-  Menu,
-  Home,
-  Gamepad2,
-  Plus,
-  MoreHorizontal,
-  User,
-} from "lucide-react";
-import { useState } from "react";
+import type { ReactNode } from "react";
+import { Home, Plus, User, Dice6 } from "lucide-react";
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -30,19 +20,15 @@ export default function Layout({ children }: LayoutProps) {
       >
         <div className="px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl">🎲</span>
-              <span className="font-bold text-xl text-game-brown hidden sm:inline">
-                Table Hopping
-              </span>
-              <span className="font-bold text-xl text-game-brown sm:hidden">
-                TTQ
-              </span>
+            <Link to="/" className="flex items-center">
+              <img
+                src="https://images.vexels.com/media/users/3/189702/isolated/preview/0909c4a72562b45eb247012f1606c4c6-icono-de-juguete-de-dados.png"
+                alt="App Logo"
+                className="h-8 sm:h-10 w-auto"
+              />
             </Link>
-
-            {/* Search Bar - Hidden on mobile */}
-            <div className="hidden md:flex flex-1 max-w-md mx-4">
+            {/* Search Bar */}
+            <div className="flex flex-1 max-w-md">
               <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
                 <span className="text-lg mr-2">🔍</span>
                 <input
@@ -52,66 +38,10 @@ export default function Layout({ children }: LayoutProps) {
                 />
               </div>
             </div>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-3 sm:gap-4">
-              <button className="p-2 hover:bg-game-cream rounded-lg transition text-game-brown">
-                <Heart className="w-5 h-5" />
-              </button>
-              <button className="p-2 hover:bg-game-cream rounded-lg transition text-game-brown">
-                <ShoppingCart className="w-5 h-5" />
-              </button>
-              <button
-                className="md:hidden p-2 hover:bg-game-cream rounded-lg transition text-game-brown"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                <Menu className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Search */}
-          <div className="md:hidden mt-3">
-            <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
-              <span className="text-lg mr-2">🔍</span>
-              <input
-                type="text"
-                placeholder="Busca algo nuevo..."
-                className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50 text-sm"
-              />
-            </div>
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-game-brown border-opacity-20 bg-white">
-            <nav className="flex flex-col gap-1 px-4 py-3">
-              <Link
-                to="/"
-                className={`px-4 py-2 rounded-lg transition ${
-                  isActive("/")
-                    ? "bg-game-rust text-white"
-                    : "hover:bg-game-cream text-game-brown"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Inicio
-              </Link>
-              <Link
-                to="/product/1"
-                className={`px-4 py-2 rounded-lg transition ${
-                  isActive("/product/1")
-                    ? "bg-game-rust text-white"
-                    : "hover:bg-game-cream text-game-brown"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Productos
-              </Link>
-            </nav>
-          </div>
-        )}
       </header>
 
       {/* Main Content */}
@@ -134,13 +64,18 @@ export default function Layout({ children }: LayoutProps) {
             <Home className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
             <span className="text-xs font-medium">Inicio</span>
           </Link>
+
           <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
-            <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+            <Dice6 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
             <span className="text-xs font-medium">Mis Juegos</span>
           </button>
           <Link
-            to="/"
-            className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust"
+            to="/publicar"
+            className={`flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition ${
+              isActive("/publicar")
+                ? "text-game-rust"
+                : "text-game-brown hover:text-game-rust"
+            }`}
           >
             <Plus className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
             <span className="text-xs font-medium">Publicar</span>

@@ -8,25 +8,86 @@ import {
   Star,
   MessageSquare,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { games } from "@/data/games";
+import type { Game } from "@/data/games";
+import { loadListings } from "@/state/listings";
 import Layout from "@/components/Layout";
+
+type DisplayGame = Omit<Game, "id"> & {
+  id: string | number;
+  source: "catalog" | "listing";
+};
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const game = games.find((g) => g.id === parseInt(id || "1"));
+
+  const catalogGames = useMemo<DisplayGame[]>(
+    () => games.map((g) => ({ ...g, source: "catalog" as const })),
+    [],
+  );
+
+  const visibleListings = useMemo(() => {
+    try {
+      return loadListings().filter((x) => x.visibility === "public");
+    } catch {
+      return [];
+    }
+  }, []);
+
+  const listingGames = useMemo<DisplayGame[]>(
+    () =>
+      visibleListings.map((listing) => {
+        const heroImage =
+          listing.images.find((img) => img.type === "hero")?.url ??
+          listing.images[0]?.url ??
+          "";
+        return {
+          id: `dyn_${listing.id}`,
+          title: listing.title,
+          category: listing.category,
+          image: heroImage || "https://placehold.co/600x600?text=Juego",
+          rating: listing.rating ?? 5,
+          reviews: listing.reviews ?? 0,
+          description: listing.description,
+          duration: listing.duration ?? "-",
+          players: listing.players ?? "-",
+          difficulty: listing.difficulty ?? "-",
+          price: listing.pricePerDay,
+          rules: {
+            video: "",
+            text: "Este juego fue publicado por la comunidad. Consulta al propietario para instrucciones detalladas.",
+          },
+          reviews_list: [],
+          source: "listing" as const,
+        };
+      }),
+    [visibleListings],
+  );
+
+  const allGames = useMemo(
+    () => [...catalogGames, ...listingGames],
+    [catalogGames, listingGames],
+  );
+
+  const game = useMemo(
+    () =>
+      id
+        ? allGames.find((g) => String(g.id) === id)
+        : allGames.length > 0
+          ? allGames[0]
+          : null,
+    [id, allGames],
+  );
 
   if (!game) {
     return (
       <Layout>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
           <p className="text-game-brown text-lg">Juego no encontrado</p>
-          <Link
-            to={`/?categoria=${encodeURIComponent(game.category)}`}
-            className="underline text-game-brown"
-          >
-            {game.category}
+          <Link to="/" className="underline text-game-brown">
+            Volver al inicio
           </Link>
         </div>
       </Layout>
