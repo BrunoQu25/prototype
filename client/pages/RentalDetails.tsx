@@ -84,29 +84,6 @@ export default function RentalDetails() {
         </form>
       </div>
       {/* Sección de video: cómo jugar */}
-      {games[id]?.rules?.video ? (
-        <div className="mt-8">
-          <h3 className="text-xl font-semibold mb-3">Video: cómo jugar</h3>
-          <div className="aspect-video w-full rounded-lg overflow-hidden">
-            <iframe
-              src={games[id].rules.video}
-              title={`Cómo jugar ${games[id].title}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-        </div>
-      ) : (
-        <a
-          className="mt-8 inline-block underline"
-          href={`https://www.youtube.com/results?search_query=c%C3%B3mo+jugar+${encodeURIComponent(games[id]?.title || "")}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Ver en YouTube cómo jugar {games[id]?.title}
-        </a>
-      )}
     </Layout>
   );
 }

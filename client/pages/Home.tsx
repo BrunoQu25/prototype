@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ChevronRight, Star } from "lucide-react";
 import { games, categories } from "@/data/games";
+import { loadListings } from "@/state/listings";
 import Layout from "@/components/Layout";
 import Carousel from "@/components/Carousel";
 import { useMemo, useState, useEffect } from "react";
@@ -52,8 +53,39 @@ const promos = [
 export default function Home() {
   const featuredGames = games.slice(0, 3);
   const recentlyAdded = games.slice(3, 6);
-
   const [filtro, setFiltro] = useState<string | null>(null);
+
+  // Dinámicos desde localStorage
+  const dynamicListings = useMemo(() => {
+    try {
+      return loadListings().filter((x) => x.visibility === "public");
+    } catch {
+      return [];
+    }
+  }, []);
+
+  const mappedDyn = useMemo(
+    () =>
+      dynamicListings.map((d) => ({
+        id: `dyn_${d.id}`,
+        title: d.title,
+        category: d.category,
+        image:
+          d.images.find((im) => im.type === "hero")?.url ||
+          d.images[0]?.url ||
+          "",
+        rating: d.rating ?? 5,
+        reviews: d.reviews ?? 0,
+        description: d.description,
+        duration: d.duration || "-",
+        players: d.players || "-",
+        difficulty: d.difficulty || "-",
+        price: d.pricePerDay,
+      })),
+    [dynamicListings],
+  );
+
+  const allGames = useMemo(() => [...games, ...mappedDyn], [mappedDyn]);
 
   // Opcional: sincronizar con la URL (?categoria=)
   // import { useSearchParams } from "react-router-dom";
@@ -65,8 +97,9 @@ export default function Home() {
   // }, [filtro]);
 
   const juegosFiltrados = useMemo(
-    () => (filtro ? games.filter((g) => sameCat(g.category, filtro)) : games),
-    [filtro],
+    () =>
+      filtro ? allGames.filter((g) => sameCat(g.category, filtro)) : allGames,
+    [allGames, filtro],
   );
 
   useEffect(() => {
@@ -83,45 +116,59 @@ export default function Home() {
       <section className="px-3 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-12">
         {!filtro && (
           <>
+            {/* Hero Section */}
+            <div className="mb-8">
+              <p className="text-muted-foreground">
+                Alquiler de juegos de mesa en Uruguay. Reservá y recibí en tu
+                casa. Explora nuestra colección para la mejor experiencia de
+                juego
+              </p>
+            </div>
+
             {/* Promo Carousel grande */}
             <div className="mb-8 sm:mb-10">
               <Carousel>
                 {promos.map((p) => (
                   <div
                     key={p.id}
-                    className="flex-shrink-0 h-full w-[92%] sm:w-[72%] px-2 min-h-[180px] sm:min-h-[220px]"
+                    className="flex-shrink-0 w-[92%] sm:w-[72%] px-2"
                   >
                     <div
-                      className={`h-full rounded-2xl overflow-hidden border border-game-brown/10 bg-gradient-to-br ${p.bg}`}
+                      className={`relative h-full rounded-2xl overflow-hidden border border-game-brown/10 bg-gradient-to-br ${p.bg}`}
                     >
-                      <div className="p-5 sm:p-8 h-full flex flex-col justify-between">
+                      <div className="p-6 sm:p-8">
                         <div className="flex items-start gap-4 sm:gap-6">
-                          <div className="text-4xl sm:text-5xl">{p.icon}</div>
-                          <div className="flex-1">
+                          <div className="flex-none w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-white/30 grid place-items-center">
+                            <span className="text-2xl sm:text-3xl leading-none">
+                              {p.icon}
+                            </span>
+                          </div>
+
+                          <div className="flex-1 min-w-0">
                             <h3 className="text-2xl sm:text-3xl font-extrabold text-game-brown">
                               {p.title}
                             </h3>
                             <p className="text-game-brown/80 mt-1 sm:mt-2">
                               {p.subtitle}
                             </p>
+
                             {p.bullets && (
-                              <ul className="mt-3 sm:mt-4 text-sm sm:text-base text-game-brown/80 list-disc pl-5">
+                              <ul className="mt-3 sm:mt-4 text-sm sm:text-base text-game-brown/80 list-disc list-inside">
                                 {p.bullets.map((b, i) => (
                                   <li key={i}>{b}</li>
                                 ))}
                               </ul>
                             )}
+
+                            {p.ctaTo && p.ctaText && (
+                              <Link
+                                to={p.ctaTo}
+                                className="inline-block mt-4 sm:mt-5 px-4 py-2 rounded-lg bg-game-brown text-white hover:opacity-90"
+                              >
+                                {p.ctaText}
+                              </Link>
+                            )}
                           </div>
-                        </div>
-                        <div className="mt-4 sm:mt-5 min-h-12 flex items-end">
-                          {p.ctaTo && p.ctaText ? (
-                            <Link
-                              to={p.ctaTo}
-                              className="inline-block px-4 py-2 rounded-lg bg-game-brown text-white hover:opacity-90"
-                            >
-                              {p.ctaText}
-                            </Link>
-                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -130,18 +177,8 @@ export default function Home() {
               </Carousel>
             </div>
 
-            {/* Hero Section */}
-            <div className="mb-5">
-              <p className="text-muted-foreground">
-                Alquiler de juegos de mesa en Uruguay. Reconocé títulos al
-                instante, reservá en minutos y recibí en tu casa.
-              </p>
-              <p className="text-game-brown text-opacity-70 text-lg">
-                Explora nuestra colección de juegos de mesa para la noche
-                perfecta
-              </p>
-            </div>
-
+            {/* Featured Games - Carousel */}
+            <div className="mb-10"></div>
             {/* Featured Games - Carousel */}
             <div className="mb-10">
               <h2 className="text-2xl font-bold text-game-brown mb-6 flex items-center gap-2">
@@ -152,7 +189,7 @@ export default function Home() {
                   <Link
                     key={game.id}
                     to={`/product/${game.id}`}
-                    className="flex-shrink-0 h-full w-1/3 px-1.5 sm:px-2 min-w-0"
+                    className="flex-shrink-0 w-1/3 px-1.5 sm:px-2 min-w-0"
                   >
                     <div className="bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all transform hover:-translate-y-1 sm:hover:-translate-y-2 border-2 border-game-gold border-opacity-50 cursor-pointer h-full flex flex-col">
                       {/* Game Image Area */}
@@ -234,7 +271,7 @@ export default function Home() {
                   <Link
                     key={game.id}
                     to={`/product/${game.id}`}
-                    className="flex-shrink-0 h-full w-1/3 sm:w-1/4 px-1.5 sm:px-2 min-w-0"
+                    className="flex-shrink-0 w-1/3 sm:w-1/4 px-1.5 sm:px-2 min-w-0"
                   >
                     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 border-2 border-game-sage border-opacity-30 cursor-pointer h-full flex flex-col">
                       {/* Game Image Area - Compact */}
