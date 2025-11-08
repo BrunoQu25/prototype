@@ -1,15 +1,20 @@
-import { useParams, Link } from "react-router-dom";
-import { ChevronRight, FileText } from "lucide-react";
+﻿import { useParams, Link } from "react-router-dom";
+import {
+  ChevronRight,
+  FileText,
+  Sparkles,
+  CheckCircle2,
+  Lightbulb,
+  Target,
+  Brain,
+} from "lucide-react";
 import AIChat from "@/components/AIChat";
 import { games } from "@/data/games";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-
 export default function GameRules() {
   const { id } = useParams<{ id: string }>();
-
   const game = games.find((g) => g.id === parseInt(id || "1"));
-
   if (!game) {
     return (
       <Layout>
@@ -25,7 +30,6 @@ export default function GameRules() {
       </Layout>
     );
   }
-
   return (
     <Layout>
       <div className="px-3 sm:px-6 py-4 sm:py-8">
@@ -42,12 +46,10 @@ export default function GameRules() {
             {game.title}
           </Link>
           <span>›</span>
-
           <span className="text-game-brown font-semibold whitespace-nowrap">
             Sobre tu juego
           </span>
         </div>
-
         <div className="mb-10">
           <h1 className="text-4xl font-bold text-game-brown mb-2">
             Sobre tu juego
@@ -93,7 +95,6 @@ export default function GameRules() {
                 Reglas
               </h2>
             </div>
-
             {/* Video Explicativo */}
             <div>
               <h3 className="text-lg font-bold text-game-brown mb-2">
@@ -110,7 +111,6 @@ export default function GameRules() {
                 />
               </div>
             </div>
-
             {/* Right: Transcription & Notes */}
             {/* Transcription Section */}
             <div>
@@ -118,7 +118,6 @@ export default function GameRules() {
                 Transcripción del video
               </h3>
             </div>
-
             {/* Consultant Card */}
             <div className="bg-white rounded-2xl p-6 border-4 border-game-gold border-opacity-50 shadow-lg">
               <div className="flex items-center gap-4 mb-4">
@@ -140,12 +139,12 @@ export default function GameRules() {
                 </p>
               </div>
             </div>
-
+            {/* Cheat Sheet: Conceptos clave (after transcription) */}
+            <CheatSheet title={game.title} />
             {/* AI Chat Section */}
             <div>
               <AIChat />
             </div>
-
             {/* Manual completo */}
             <div>
               <h3 className="text-lg font-bold text-game-brown mb-2">Manual completo</h3>
@@ -168,5 +167,180 @@ export default function GameRules() {
         </div>
       </div>
     </Layout>
+  );
+}
+function CheatSheet({ title }: { title: string }) {
+  const key = title.toLowerCase();
+  let basicos: string[] = [];
+  let avanzados: string[] = [];
+  let pro: string[] = [];
+  switch (true) {
+    case /catan/.test(key):
+      basicos = [
+        "Objetivo: llegar a 10 puntos",
+        "Produce recursos con tiradas adyacentes",
+        "Comercio 4:1 / puertos 3:1 o 2:1",
+      ];
+      avanzados = [
+        "Ladrón (7): bloquea y roba recursos",
+        "Planifica rutas para carretera más larga",
+        "Gestiona probabilidades (más 6/8 que 2/12)",
+      ];
+      pro = [
+        "Expande hacia puertos clave temprano",
+        "Diversifica números para producir estable",
+      ];
+      break;
+    case /ticket to ride|ticket/.test(key):
+      basicos = [
+        "Roba cartas de color o billetes",
+        "Reclama rutas con un solo color",
+        "Completa billetes para puntuar alto",
+      ];
+      avanzados = [
+        "Bloquea trayectos críticos del rival",
+        "Prioriza rutas largas + comodines",
+        "Gestiona mano para dobles rutas",
+      ];
+      pro = [
+        "Conecta centros antes de expandirte",
+        "Guarda comodines para momentos clave",
+      ];
+      break;
+    case /pandemic/.test(key):
+      basicos = [
+        "Rol distinto: usa tu habilidad",
+        "Trata cubos y evita brotes",
+        "Junta cartas para descubrir curas",
+      ];
+      avanzados = [
+        "Coordina intercambios en ciudad exacta",
+        "Calcula ritmo del mazo de infección",
+        "Cadena acciones para turnos potentes",
+      ];
+      pro = [
+        "Planifica alrededor de epidemias",
+        "Prioriza ciudades con 3 cubos",
+      ];
+      break;
+    case /carcassonne/.test(key):
+      basicos = [
+        "Coloca losetas con bordes coincidentes",
+        "Coloca meeples y recupéralos al puntuar",
+        "Ciudades/caminos/claustros puntúan al cerrar",
+      ];
+      avanzados = [
+        "Granjas puntúan al final (dominio)",
+        "Fuerza cierres que beneficien más a otros",
+        "Divide mayorías con conexiones laterales",
+      ];
+      pro = [
+        "Une granjas en el último momento",
+        "Evita quedarte sin meeples",
+      ];
+      break;
+    case /splendor/.test(key):
+      basicos = [
+        "Toma 3 gemas distintas o 2 iguales",
+        "Compra desarrollos para descuento fijo",
+        "Atrae nobles para puntos extra",
+      ];
+      avanzados = [
+        "Reserva carta y toma oro (comodín)",
+        "Curva de descuentos > cartas caras",
+        "Controla tempo negando cartas clave",
+      ];
+      pro = [
+        "Construye descuentos en 2 colores",
+        "Ajusta a nobles disponibles",
+      ];
+      break;
+    case /azul/.test(key):
+      basicos = [
+        "Toma todas las fichas de un color de una fábrica",
+        "Coloca en patrón; excedentes penalizan",
+        "Puntúa por colocar en el muro",
+      ];
+      avanzados = [
+        "Maximiza adyacencias y bonos de fila/columna",
+        "Controla basura al suelo del rival",
+        "Completa set de color para bonus",
+      ];
+      pro = [
+        "Evita sobrecargar la línea de suelo",
+        "Calcula órdenes para no desperdiciar",
+      ];
+      break;
+    default:
+      basicos = [
+        "Objetivo y condiciones de victoria",
+        "Turno: acciones básicas del jugador",
+        "Cómo se puntúa al final",
+      ];
+      avanzados = [
+        "Consejo estratégico común",
+        "Error frecuente a evitar",
+        "Sugerencia de planificación",
+      ];
+      pro = [
+        "Optimiza recursos clave",
+        "Aprovecha ventanas de oportunidad",
+      ];
+  }
+  return (
+    <div className="mb-8">
+      <h3 className="text-lg font-bold text-game-brown mb-2"> Conceptos clave
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Card Básicos */}
+        <div className="relative rounded-2xl border-4 border-game-gold/40 bg-white shadow-md p-4">
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-game-gold to-amber-400 rounded-t-xl" />
+          <div className="flex items-center gap-2 mb-2 text-game-brown">
+            <Lightbulb className="w-5 h-5 text-game-gold" />
+            <span className="text-sm font-semibold uppercase tracking-wide">Básicos</span>
+          </div>
+          <ul className="space-y-1 text-sm text-game-brown">
+            {basicos.slice(0, 3).map((txt, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-game-gold mt-0.5" />
+                <span>{txt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* Card Avanzados */}
+        <div className="relative rounded-2xl border-4 border-game-brown/20 bg-white shadow-md p-4">
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-amber-300 to-orange-300 rounded-t-xl" />
+          <div className="flex items-center gap-2 mb-2 text-game-brown">
+            <Brain className="w-5 h-5 text-game-brown" />
+            <span className="text-sm font-semibold uppercase tracking-wide">Avanzados</span>
+          </div>
+          <ul className="space-y-1 text-sm text-game-brown">
+            {avanzados.slice(0, 3).map((txt, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-game-gold mt-0.5" />
+                <span>{txt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* Card Pro Tips / Objetivo */}
+        <div className="relative rounded-2xl border-4 border-game-gold/30 bg-white shadow-md p-4">
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-game-gold to-green-300 rounded-t-xl" />
+          <div className="flex items-center gap-2 mb-2 text-game-brown">
+            <Target className="w-5 h-5 text-game-gold" />
+            <span className="text-sm font-semibold uppercase tracking-wide">Pro Tips</span>
+          </div>
+          <ul className="space-y-1 text-sm text-game-brown">
+            {(pro.length ? pro : avanzados.slice(0, 2)).map((txt, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-game-gold mt-0.5" />
+                <span>{txt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }
