@@ -174,10 +174,11 @@ function CheatSheet({ title }: { title: string }) {
   let basicos: string[] = [];
   let avanzados: string[] = [];
   let pro: string[] = [];
+  let win: string = "";
   switch (true) {
     case /catan/.test(key):
+      win = "Alcanza 10 puntos con asentamientos/ciudades y cartas.";
       basicos = [
-        "Objetivo: llegar a 10 puntos",
         "Produce recursos con tiradas adyacentes",
         "Comercio 4:1 / puertos 3:1 o 2:1",
       ];
@@ -192,6 +193,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /ticket to ride|ticket/.test(key):
+      win = "Mayor puntaje tras rutas y billetes completados.";
       basicos = [
         "Roba cartas de color o billetes",
         "Reclama rutas con un solo color",
@@ -208,6 +210,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /pandemic/.test(key):
+      win = "Descubran 4 curas antes de perder por brotes/mazo.";
       basicos = [
         "Rol distinto: usa tu habilidad",
         "Trata cubos y evita brotes",
@@ -224,6 +227,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /carcassonne/.test(key):
+      win = "Mayor puntaje por ciudades, caminos, claustros y granjas.";
       basicos = [
         "Coloca losetas con bordes coincidentes",
         "Coloca meeples y recupéralos al puntuar",
@@ -240,6 +244,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /splendor/.test(key):
+      win = "Primero en alcanzar 15 puntos.";
       basicos = [
         "Toma 3 gemas distintas o 2 iguales",
         "Compra desarrollos para descuento fijo",
@@ -256,6 +261,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /azul/.test(key):
+      win = "Mayor puntaje por patrones y bonos al final.";
       basicos = [
         "Toma todas las fichas de un color de una fábrica",
         "Coloca en patrón; excedentes penalizan",
@@ -272,6 +278,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /codenames/.test(key):
+      win = "Tu equipo descubre todas sus palabras antes del rival.";
       basicos = [
         "Pista: 1 palabra + numero",
         "Evita al asesino",
@@ -288,6 +295,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /wingspan/.test(key):
+      win = "Mayor puntaje por aves, objetivos, huevos y cartas.";
       basicos = [
         "Juega aves y activa habitats",
         "Gana comida, huevos y cartas",
@@ -304,6 +312,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /terraforming mars|terraforming/.test(key):
+      win = "Mayor puntaje tras terraformar y proyectos.";
       basicos = [
         "Sube temp/oxigeno/oceanos",
         "Mejora producciones y proyectos",
@@ -320,6 +329,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /^root\b/.test(key):
+      win = "Primero a 30 puntos o por dominacion.";
       basicos = [
         "Conoce tu faccion y objetivo",
         "Controla claros y fabrica",
@@ -336,6 +346,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /spirit island|spirit/.test(key):
+      win = "Cumplir condicion de miedo; eviten perder por blight.";
       basicos = [
         "Poderes rapidos/lentos y presencia",
         "Usa Dahan para contraatacar",
@@ -352,6 +363,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /the crew|noveno planeta|crew/.test(key):
+      win = "Completar todas las misiones cumpliendo tareas.";
       basicos = [
         "Cumple tareas en orden",
         "Comunicacion limitada y senales",
@@ -368,6 +380,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /just one/.test(key):
+      win = "Adivinar la mayor cantidad de palabras como equipo.";
       basicos = [
         "Escribe una pista unica",
         "Duplicadas se tachan",
@@ -384,6 +397,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /cartographers/.test(key):
+      win = "Mayor puntaje por objetivos A-D y monedas.";
       basicos = [
         "Dibuja forma + terreno",
         "Monedas y evita monstruos",
@@ -400,6 +414,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /jaipur/.test(key):
+      win = "Gana quien consigue 2 sellos (mejor de 3).";
       basicos = [
         "Toma cartas o camellos",
         "Vende sets por fichas",
@@ -416,6 +431,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /patchwork/.test(key):
+      win = "Mayor puntaje: botones menos huecos.";
       basicos = [
         "Compra piezas con botones/tiempo",
         "Evita huecos",
@@ -432,6 +448,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /dominion/.test(key):
+      win = "Mayor puntaje de cartas de Victoria al final.";
       basicos = [
         "Compra Acciones/Tesoros/Victoria",
         "Monta motores de robo + accion",
@@ -448,6 +465,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /clank/.test(key):
+      win = "Sobrevive con artefacto y mayor puntaje.";
       basicos = [
         "Compra cartas y muevete",
         "Controla clank",
@@ -464,6 +482,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /dixit/.test(key):
+      win = "Mayor puntaje tras varias rondas narrando y adivinando.";
       basicos = [
         "Da una pista sutil",
         "Elige carta que encaje",
@@ -480,6 +499,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /sushi go/.test(key):
+      win = "Mayor puntaje tras 3 rondas (incluye puddings).";
       basicos = [
         "Elige 1 y pasa el resto",
         "Sets puntuan al final",
@@ -496,6 +516,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /kingdomino/.test(key):
+      win = "Mayor puntaje (coronas x tamano de regiones).";
       basicos = [
         "Elige losetas y colocalas",
         "Conecta terrenos iguales",
@@ -512,6 +533,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /love letter/.test(key):
+      win = "Acumular mas sellos ganando rondas.";
       basicos = [
         "Roba 1 y juega 1",
         "Efectos eliminan o protegen",
@@ -528,6 +550,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /cascadia/.test(key):
+      win = "Mayor puntaje por fauna y habitats.";
       basicos = [
         "Toma loseta+fauna y colocalas",
         "Respeta habitats",
@@ -544,6 +567,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /sagrada/.test(key):
+      win = "Mayor puntaje por objetivos; huecos penalizan.";
       basicos = [
         "Coloca dados por color/valor",
         "Respeta restricciones del patron",
@@ -560,6 +584,7 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     case /calico/.test(key):
+      win = "Mayor puntaje por objetivos, gatos y botones.";
       basicos = [
         "Coloca losetas por color/patron",
         "Cumple objetivos de losetas",
@@ -576,10 +601,10 @@ function CheatSheet({ title }: { title: string }) {
       ];
       break;
     default:
+      win = "Mayor puntaje al final de la partida.";
       basicos = [
-        "Objetivo y condiciones de victoria",
-        "Turno: acciones básicas del jugador",
-        "Cómo se puntúa al final",
+        "Turno: acciones basicas del jugador",
+        "Flujo de ronda y fases",
       ];
       avanzados = [
         "Consejo estratégico común",
@@ -596,6 +621,17 @@ function CheatSheet({ title }: { title: string }) {
       <h3 className="text-lg font-bold text-game-brown mb-2"> Conceptos clave
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {win && (
+          <div className="relative rounded-2xl border-4 border-game-gold/50 bg-white shadow-md p-4">
+            <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-game-gold to-amber-400 rounded-t-xl" />
+            <div className="flex items-center gap-2 mb-2 text-game-brown">
+              <Target className="w-5 h-5 text-game-gold" />
+              <span className="text-sm font-semibold uppercase tracking-wide">Cómo ganar</span>
+            </div>
+            <p className="text-sm text-game-brown">{win}</p>
+          </div>
+        )}
+        
         {/* Card Básicos */}
         <div className="relative rounded-2xl border-4 border-game-gold/40 bg-white shadow-md p-4">
           <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-game-gold to-amber-400 rounded-t-xl" />
