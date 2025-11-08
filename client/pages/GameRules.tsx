@@ -271,6 +271,310 @@ function CheatSheet({ title }: { title: string }) {
         "Calcula órdenes para no desperdiciar",
       ];
       break;
+    case /codenames/.test(key):
+      basicos = [
+        "Pista: 1 palabra + numero",
+        "Evita al asesino",
+        "Apunta a palabras de tu equipo",
+      ];
+      avanzados = [
+        "Asociaciones amplias y creativas",
+        "Evita falsos amigos del rival",
+        "Secuencia pistas para limpiar zonas",
+      ];
+      pro = [
+        "Mapa de riesgo por casillas",
+        "Lee la intencion del oponente",
+      ];
+      break;
+    case /wingspan/.test(key):
+      basicos = [
+        "Juega aves y activa habitats",
+        "Gana comida, huevos y cartas",
+        "Sigue objetivos de ronda",
+      ];
+      avanzados = [
+        "Combos de activaciones",
+        "Equilibra habitats y nidos",
+        "Planifica dietas y costos",
+      ];
+      pro = [
+        "Gestion fina de huevos",
+        "Aprovecha bonificaciones finales",
+      ];
+      break;
+    case /terraforming mars|terraforming/.test(key):
+      basicos = [
+        "Sube temp/oxigeno/oceanos",
+        "Mejora producciones y proyectos",
+        "Hitos y premios suman mucho",
+      ];
+      avanzados = [
+        "Sinergias por etiquetas",
+        "Tempo de hitos/premios",
+        "Eficiencia por generaciones",
+      ];
+      pro = [
+        "Ciclo de cartas y economia",
+        "Timing de combos",
+      ];
+      break;
+    case /^root\b/.test(key):
+      basicos = [
+        "Conoce tu faccion y objetivo",
+        "Controla claros y fabrica",
+        "Adapta tu plan al mapa",
+      ];
+      avanzados = [
+        "Presiona economias rivales",
+        "Aprovecha crafting y movilidad",
+        "Lee el tempo de la mesa",
+      ];
+      pro = [
+        "Evita coaliciones en tu contra",
+        "Cierra de forma inesperada",
+      ];
+      break;
+    case /spirit island|spirit/.test(key):
+      basicos = [
+        "Poderes rapidos/lentos y presencia",
+        "Usa Dahan para contraatacar",
+        "Defiende y empuja invasores",
+      ];
+      avanzados = [
+        "Combos de miedo y control",
+        "Aislamiento y defensa",
+        "Planifica segun fases Invader",
+      ];
+      pro = [
+        "Gestion de blight y crecimiento",
+        "Sinergiza aspectos/escenarios",
+      ];
+      break;
+    case /the crew|noveno planeta|crew/.test(key):
+      basicos = [
+        "Cumple tareas en orden",
+        "Comunicacion limitada y senales",
+        "Gestion de triunfos",
+      ];
+      avanzados = [
+        "Identifica cartas clave",
+        "Ordena misiones para facilitar",
+        "Senales que no bloqueen",
+      ];
+      pro = [
+        "Lidera con info oculta",
+        "Timing de altas/bajas",
+      ];
+      break;
+    case /just one/.test(key):
+      basicos = [
+        "Escribe una pista unica",
+        "Duplicadas se tachan",
+        "Acierta la palabra",
+      ];
+      avanzados = [
+        "Pistas laterales/indirectas",
+        "Riesgo vs. claridad",
+        "Evita asociaciones obvias",
+      ];
+      pro = [
+        "Calibra segun el grupo",
+        "Cubre huecos semanticos",
+      ];
+      break;
+    case /cartographers/.test(key):
+      basicos = [
+        "Dibuja forma + terreno",
+        "Monedas y evita monstruos",
+        "Puntua objetivos A-D",
+      ];
+      avanzados = [
+        "Optimiza adyacencias y regiones",
+        "Gestiona montanas/aldeas",
+        "Minimiza huecos",
+      ];
+      pro = [
+        "Sincroniza con objetivos activos",
+        "Valora flexibilidad de formas",
+      ];
+      break;
+    case /jaipur/.test(key):
+      basicos = [
+        "Toma cartas o camellos",
+        "Vende sets por fichas",
+        "Bonus por 3/4/5",
+      ];
+      avanzados = [
+        "Control de camellos y mercado",
+        "Timing de ventas",
+        "Negacion de fichas",
+      ];
+      pro = [
+        "Lee el mazo y ritmo",
+        "Guarda sets para el momento",
+      ];
+      break;
+    case /patchwork/.test(key):
+      basicos = [
+        "Compra piezas con botones/tiempo",
+        "Evita huecos",
+        "Gana ingresos por botones",
+      ];
+      avanzados = [
+        "Orden de turno por tiempo",
+        "Planifica piezas pequenas",
+        "Prioriza ingresos tempranos",
+      ];
+      pro = [
+        "Fuerza saltos del rival",
+        "Ahorra para piezas clave",
+      ];
+      break;
+    case /dominion/.test(key):
+      basicos = [
+        "Compra Acciones/Tesoros/Victoria",
+        "Monta motores de robo + accion",
+        "Gestiona tu baraja",
+      ];
+      avanzados = [
+        "Adelgaza (quita Coppers/Curses)",
+        "Control de pilas",
+        "Consistencia del motor",
+      ];
+      pro = [
+        "Tempo de Provincias",
+        "Transicion motor->dinero",
+      ];
+      break;
+    case /clank/.test(key):
+      basicos = [
+        "Compra cartas y muevete",
+        "Controla clank",
+        "Coge artefacto y sal",
+      ];
+      avanzados = [
+        "Rutas eficientes",
+        "Gestion de clank/curacion",
+        "Sinergias de mazo",
+      ];
+      pro = [
+        "Tempo de salida",
+        "Oportunismo en mercado",
+      ];
+      break;
+    case /dixit/.test(key):
+      basicos = [
+        "Da una pista sutil",
+        "Elige carta que encaje",
+        "Vota la del narrador",
+      ];
+      avanzados = [
+        "Equilibra obvio vs. cripto",
+        "Lee gustos del grupo",
+        "Evita pistas repetidas",
+      ];
+      pro = [
+        "Construye meta compartida",
+        "Gestiona marcadores de puntos",
+      ];
+      break;
+    case /sushi go/.test(key):
+      basicos = [
+        "Elige 1 y pasa el resto",
+        "Sets puntuan al final",
+        "Cuenta cartas vistas",
+      ];
+      avanzados = [
+        "Timing de wasabi+sashimi",
+        "Dumplings vs. tempura",
+        "Gestion de puddings",
+      ];
+      pro = [
+        "Seala picks para forzar",
+        "Ajusta segun numero de jugadores",
+      ];
+      break;
+    case /kingdomino/.test(key):
+      basicos = [
+        "Elige losetas y colocalas",
+        "Conecta terrenos iguales",
+        "Coronas x tamanio",
+      ];
+      avanzados = [
+        "Orden de turno vs. calidad",
+        "Evita quedarte sin hueco 5x5",
+        "Bloquea al rival",
+      ];
+      pro = [
+        "Planifica 7x7 variante",
+        "Maximiza regiones con coronas",
+      ];
+      break;
+    case /love letter/.test(key):
+      basicos = [
+        "Roba 1 y juega 1",
+        "Efectos eliminan o protegen",
+        "Gana la carta mas alta",
+      ];
+      avanzados = [
+        "Cuenta cartas jugadas",
+        "Blafo con guardas y baron",
+        "Lee la proteccion de doncella",
+      ];
+      pro = [
+        "Presiona con info parcial",
+        "Riesgo calculado al final",
+      ];
+      break;
+    case /cascadia/.test(key):
+      basicos = [
+        "Toma loseta+fauna y colocalas",
+        "Respeta habitats",
+        "Sigue patrones de fauna",
+      ];
+      avanzados = [
+        "Cadena regiones grandes",
+        "Gestiona objetivos variables",
+        "Aprovecha naturaleza",
+      ];
+      pro = [
+        "Flexibiliza con tokens",
+        "Minimiza penalizaciones",
+      ];
+      break;
+    case /sagrada/.test(key):
+      basicos = [
+        "Coloca dados por color/valor",
+        "Respeta restricciones del patron",
+        "Usa herramientas con favor",
+      ];
+      avanzados = [
+        "Reserva espacios para colores",
+        "Gestiona secuencia de colocacion",
+        "Cumple objetivos publicos/privados",
+      ];
+      pro = [
+        "Mitiga azar con herramientas",
+        "Evita huecos al final",
+      ];
+      break;
+    case /calico/.test(key):
+      basicos = [
+        "Coloca losetas por color/patron",
+        "Cumple objetivos de losetas",
+        "Atrae gatos y botones",
+      ];
+      avanzados = [
+        "Prioriza colores disputados",
+        "Gestiona manos y mercado",
+        "Secuencia para combos de gatos",
+      ];
+      pro = [
+        "Plan largo plazo vs. tactico",
+        "No bloquees patrones clave",
+      ];
+      break;
     default:
       basicos = [
         "Objetivo y condiciones de victoria",
