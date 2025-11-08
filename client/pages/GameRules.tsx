@@ -1,8 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, FileText } from "lucide-react";
 import AIChat from "@/components/AIChat";
 import { games } from "@/data/games";
 import Layout from "@/components/Layout";
+import { Button } from "@/components/ui/button";
 
 export default function GameRules() {
   const { id } = useParams<{ id: string }>();
@@ -113,7 +114,7 @@ export default function GameRules() {
             {/* Right: Transcription & Notes */}
             {/* Transcription Section */}
             <div>
-              <h3 className="text-2xl font-bold text-game-brown mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-game-brown mb-2">
                 Transcripción del video
               </h3>
             </div>
@@ -143,6 +144,25 @@ export default function GameRules() {
             {/* AI Chat Section */}
             <div>
               <AIChat />
+            </div>
+
+            {/* Manual completo */}
+            <div>
+              <h3 className="text-lg font-bold text-game-brown mb-2">Manual completo</h3>
+              <p className="text-game-brown text-opacity-80 mb-3">
+                Consulta el manual completo del juego en formato PDF.
+              </p>
+              <Button asChild variant="secondary">
+                <a
+                  href="/rules/mock-game-rules.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Abrir manual completo en PDF de ${game.title}`}
+                  title="Ver manual completo (PDF)"
+                >
+                  <FileText /> Ver manual completo (PDF)
+                </a>
+              </Button>
             </div>
           </div>
         </div>
