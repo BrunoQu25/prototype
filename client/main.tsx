@@ -10,8 +10,6 @@ import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import GameRules from "./pages/GameRules";
 import GameReviews from "./pages/GameReviews";
-import RentalDetails from "./pages/RentalDetails";
-import RentalDelivery from "./pages/RentalDelivery";
 import RentalConfirm from "./pages/RentalConfirm";
 import NotFound from "./pages/NotFound";
 
@@ -28,8 +26,7 @@ const RootApp = () => (
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/product/:id/rules" element={<GameRules />} />
           <Route path="/product/:id/reviews" element={<GameReviews />} />
-          <Route path="/product/:id/rental" element={<RentalDetails />} />
-          <Route path="/product/:id/rental/delivery" element={<RentalDelivery />} />
+          <Route path="/product/:id/rental" element={<RentalConfirm />} />
           <Route path="/product/:id/rental/confirm" element={<RentalConfirm />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

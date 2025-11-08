@@ -17,9 +17,11 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [productSearchOpen, setProductSearchOpen] = useState(false);
   const location = useLocation();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path; 
+  const hideBottomNav = /^\/product\/\d+(?:\/.*)?$/.test(location.pathname);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-game-cream to-amber-50 flex flex-col">
@@ -41,20 +43,34 @@ export default function Layout({ children }: LayoutProps) {
               </span>
             </Link>
 
-            {/* Search Bar - Hidden on mobile */}
+            {/* Search Bar - Hidden on mobile. On product pages we collapse the central search (icon is in the right actions) */}
             <div className="hidden md:flex flex-1 max-w-md mx-4">
-              <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
-                <span className="text-lg mr-2">🔍</span>
-                <input
-                  type="text"
-                  placeholder="Busca algo nuevo..."
-                  className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50"
-                />
-              </div>
+              {!hideBottomNav ? (
+                <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
+                  <span className="text-lg mr-2">🔍</span>
+                  <input
+                    type="text"
+                    placeholder="Busca algo nuevo..."
+                    className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50"
+                  />
+                </div>
+              ) : null}
             </div>
 
             {/* Right Actions */}
             <div className="flex items-center gap-3 sm:gap-4">
+              {/* Compact search icon on product pages (placed to the left of favorites) */}
+              {hideBottomNav && (
+                <button
+                  onClick={() => setProductSearchOpen(true)}
+                  aria-label="Abrir búsqueda"
+                  title="Buscar"
+                  className="p-2 hover:bg-game-cream rounded-lg transition text-game-brown"
+                >
+                  <span className="text-lg">🔍</span>
+                </button>
+              )}
+
               <button className="p-2 hover:bg-game-cream rounded-lg transition text-game-brown">
                 <Heart className="w-5 h-5" />
               </button>
@@ -70,17 +86,38 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           </div>
 
-          {/* Mobile Search */}
+          {/* Mobile Search (collapsed to icon on product pages) */}
           <div className="md:hidden mt-3">
-            <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
-              <span className="text-lg mr-2">🔍</span>
-              <input
-                type="text"
-                placeholder="Busca algo nuevo..."
-                className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50 text-sm"
-              />
-            </div>
+            {!hideBottomNav ? (
+              <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
+                <span className="text-lg mr-2">🔍</span>
+                <input
+                  type="text"
+                  placeholder="Busca algo nuevo..."
+                  className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50 text-sm"
+                />
+              </div>
+            ) : null}
           </div>
+
+          {/* Product search modal (used when the compact 🔍 is clicked on product pages) */}
+          {productSearchOpen && (
+            <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center">
+              <div className="absolute inset-0 bg-black/40" onClick={() => setProductSearchOpen(false)} />
+              <div className="relative w-full max-w-md bg-white rounded-xl p-4 mt-20 sm:mt-0">
+                <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
+                  <span className="text-lg mr-2">🔍</span>
+                  <input
+                    autoFocus
+                    type="text"
+                    placeholder="Busca algo nuevo..."
+                    className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50"
+                  />
+                  <button onClick={() => setProductSearchOpen(false)} className="ml-3 px-3 py-1 rounded-md text-game-brown">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -117,44 +154,48 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">{children}</main>
 
-      {/* Bottom Navigation */}
-      <nav
-        className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-      >
-        <div className="flex justify-around">
-          <Link
-            to="/"
-            className={`flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition ${
-              isActive("/")
-                ? "text-game-rust"
-                : "text-game-brown hover:text-game-rust"
-            }`}
+      {/* Bottom Navigation (hidden on product detail) */}
+      {!hideBottomNav && (
+        <>
+          <nav
+            className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl"
+            style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
           >
-            <Home className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-            <span className="text-xs font-medium">Inicio</span>
-          </Link>
-          <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
-            <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-            <span className="text-xs font-medium">Mis Juegos</span>
-          </button>
-          <Link
-            to="/"
-            className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust"
-          >
-            <Plus className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-            <span className="text-xs font-medium">Publicar</span>
-          </Link>
+            <div className="flex justify-around">
+              <Link
+                to="/"
+                className={`flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition ${
+                  isActive("/")
+                    ? "text-game-rust"
+                    : "text-game-brown hover:text-game-rust"
+                }`}
+              >
+                <Home className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+                <span className="text-xs font-medium">Inicio</span>
+              </Link>
+              <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
+                <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+                <span className="text-xs font-medium">Mis Juegos</span>
+              </button>
+              <Link
+                to="/"
+                className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust"
+              >
+                <Plus className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+                <span className="text-xs font-medium">Publicar</span>
+              </Link>
 
-          <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
-            <User className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-            <span className="text-xs font-medium">Perfil</span>
-          </button>
-        </div>
-      </nav>
+              <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
+                <User className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+                <span className="text-xs font-medium">Perfil</span>
+              </button>
+            </div>
+          </nav>
 
-      {/* Padding for bottom nav */}
-      <div className="h-24"></div>
+          {/* Padding for bottom nav */}
+          <div className="h-24"></div>
+        </>
+      )}
     </div>
   );
 }
