@@ -92,6 +92,7 @@ export default function Layout({ children }: LayoutProps) {
   const [panelQuery, setPanelQuery] = useState("");
   const [panelRange, setPanelRange] = useState<DateRange | undefined>();
   const [calendarVisible, setCalendarVisible] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const setQuery = useCallback((value: string) => {
     setSearchState((prev) => ({
@@ -239,63 +240,16 @@ export default function Layout({ children }: LayoutProps) {
 
   const isActive = (path: string) => location.pathname === path; 
   const hideBottomNav = /^\/product\/\d+(?:\/.*)?$/.test(location.pathname);
+  const hideHeader = /^\/product\/\d+(?:\/.*)?$/.test(location.pathname);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-game-cream to-amber-50 flex flex-col">
-      {/* Header */}
-      <header
-        className="sticky top-0 z-40 bg-white shadow-md border-b-4 border-game-rust"
-        style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}
-      >
-        <div className="px-3 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between gap-4">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl">🎲</span>
-              <span className="font-bold text-xl text-game-brown hidden sm:inline">
-                Table Hopping
-              </span>
-              <span className="font-bold text-xl text-game-brown sm:hidden">
-                TTQ
-              </span>
-            </Link>
-
-            {/* Search Bar - Hidden on mobile. On product pages we collapse the central search (icon is in the right actions) */}
-            <div className="hidden md:flex flex-1 max-w-md mx-4">
-              {!hideBottomNav ? (
-                <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
-                  <span className="text-lg mr-2">🔍</span>
-                  <input
-                    type="text"
-                    placeholder="Busca algo nuevo..."
-                    className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50"
-                  />
-                </div>
-              ) : null}
-            </div>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-3 sm:gap-4">
-              {/* Compact search icon on product pages (placed to the left of favorites) */}
-              {hideBottomNav && (
-                <button
-                  onClick={() => setProductSearchOpen(true)}
-                  aria-label="Abrir búsqueda"
-                  title="Buscar"
-                  className="p-2 hover:bg-game-cream rounded-lg transition text-game-brown"
-                >
-                  <span className="text-lg">🔍</span>
-                </button>
-              )}
-
-              <button className="p-2 hover:bg-game-cream rounded-lg transition text-game-brown">
-                <Heart className="w-5 h-5" />
     <SearchContext.Provider value={contextValue}>
       <div className="min-h-screen bg-gradient-to-br from-game-cream to-amber-50 flex flex-col">
-        <header
-          className="sticky top-0 z-40 bg-white shadow-md border-b-4 border-game-rust"
-          style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}
-        >
+        {!hideHeader && (
+          <header
+            className="sticky top-0 z-40 bg-white shadow-md border-b-4 border-game-rust"
+            style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}
+          >
           <div className="px-3 sm:px-6 py-3 sm:py-4">
             <div className="flex items-center justify-between gap-4">
               <button
@@ -329,20 +283,6 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           </div>
 
-          {/* Mobile Search (collapsed to icon on product pages) */}
-          <div className="md:hidden mt-3">
-            {!hideBottomNav ? (
-              <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
-                <span className="text-lg mr-2">🔍</span>
-                <input
-                  type="text"
-                  placeholder="Busca algo nuevo..."
-                  className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50 text-sm"
-                />
-              </div>
-            ) : null}
-          </div>
-
           {/* Product search modal (used when the compact 🔍 is clicked on product pages) */}
           {productSearchOpen && (
             <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center">
@@ -361,44 +301,43 @@ export default function Layout({ children }: LayoutProps) {
               </div>
             </div>
           )}
-        </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-game-brown border-opacity-20 bg-white">
-            <nav className="flex flex-col gap-1 px-4 py-3">
-              <Link
-                to="/"
-                className={`px-4 py-2 rounded-lg transition ${
-                  isActive("/")
-                    ? "bg-game-rust text-white"
-                    : "hover:bg-game-cream text-game-brown"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Inicio
-              </Link>
-              <Link
-                to="/product/1"
-                className={`px-4 py-2 rounded-lg transition ${
-                  isActive("/product/1")
-                    ? "bg-game-rust text-white"
-                    : "hover:bg-game-cream text-game-brown"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Productos
-              </Link>
-            </nav>
-          </div>
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-game-brown border-opacity-20 bg-white">
+              <nav className="flex flex-col gap-1 px-4 py-3">
+                <Link
+                  to="/"
+                  className={`px-4 py-2 rounded-lg transition ${
+                    isActive("/")
+                      ? "bg-game-rust text-white"
+                      : "hover:bg-game-cream text-game-brown"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Inicio
+                </Link>
+                <Link
+                  to="/product/1"
+                  className={`px-4 py-2 rounded-lg transition ${
+                    isActive("/product/1")
+                      ? "bg-game-rust text-white"
+                      : "hover:bg-game-cream text-game-brown"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Productos
+                </Link>
+              </nav>
+            </div>
+          )}
+        </header>
         )}
-      </header>
 
         <main className="flex-1 overflow-y-auto">{children}</main>
 
-      {/* Bottom Navigation (hidden on product detail) */}
-      {!hideBottomNav && (
-        <>
+        {/* Bottom Navigation (hidden on product detail) */}
+        {!hideBottomNav && (
           <nav
             className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl"
             style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
@@ -416,7 +355,7 @@ export default function Layout({ children }: LayoutProps) {
                 <span className="text-xs font-medium">Inicio</span>
               </Link>
               <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
-                <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+                <Dice6 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
                 <span className="text-xs font-medium">Mis Juegos</span>
               </button>
               <Link
@@ -426,48 +365,15 @@ export default function Layout({ children }: LayoutProps) {
                 <Plus className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
                 <span className="text-xs font-medium">Publicar</span>
               </Link>
-        <nav
-          className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-game-rust shadow-2xl"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
-          <div className="flex justify-around">
-            <Link
-              to="/"
-              className={`flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition ${
-                isActive("/")
-                  ? "text-game-rust"
-                  : "text-game-brown hover:text-game-rust"
-              }`}
-            >
-              <Home className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-              <span className="text-xs font-medium">Inicio</span>
-            </Link>
+              <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
+                <User className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
+                <span className="text-xs font-medium">Perfil</span>
+              </button>
+            </div>
+          </nav>
+        )}
 
-            <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
-              <Dice6 className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-              <span className="text-xs font-medium">Mis Juegos</span>
-            </button>
-            <Link
-              to="/publicar"
-              className={`flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition ${
-                isActive("/publicar")
-                  ? "text-game-rust"
-                  : "text-game-brown hover:text-game-rust"
-              }`}
-            >
-              <Plus className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-              <span className="text-xs font-medium">Publicar</span>
-            </Link>
-
-                <button className="flex flex-col items-center justify-center flex-1 py-2 sm:py-3 transition text-game-brown hover:text-game-rust">
-                  <User className="w-5 h-5 sm:w-6 sm:h-6 mb-0.5" />
-                  <span className="text-xs font-medium">Perfil</span>
-                </button>
-              </div>
-            </nav>
-
-        <div className="h-24" />
-
+        {/* Search Panel Modal */}
         {isPanelOpen && (
           <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex justify-center items-start sm:items-center p-2 sm:p-6">
             <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4">

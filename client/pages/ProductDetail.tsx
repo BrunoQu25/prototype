@@ -9,78 +9,14 @@ import {
   Star,
   MessageSquare,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { games } from "@/data/games";
-import type { Game } from "@/data/games";
-import { loadListings } from "@/state/listings";
 import Layout from "@/components/Layout";
-
-type DisplayGame = Omit<Game, "id"> & {
-  id: string | number;
-  source: "catalog" | "listing";
-};
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const [isWishlisted, setIsWishlisted] = useState(false);
-
-  const catalogGames = useMemo<DisplayGame[]>(
-    () => games.map((g) => ({ ...g, source: "catalog" as const })),
-    [],
-  );
-
-  const visibleListings = useMemo(() => {
-    try {
-      return loadListings().filter((x) => x.visibility === "public");
-    } catch {
-      return [];
-    }
-  }, []);
-
-  const listingGames = useMemo<DisplayGame[]>(
-    () =>
-      visibleListings.map((listing) => {
-        const heroImage =
-          listing.images.find((img) => img.type === "hero")?.url ??
-          listing.images[0]?.url ??
-          "";
-        return {
-          id: `dyn_${listing.id}`,
-          title: listing.title,
-          category: listing.category,
-          image: heroImage || "https://placehold.co/600x600?text=Juego",
-          rating: listing.rating ?? 5,
-          reviews: listing.reviews ?? 0,
-          description: listing.description,
-          duration: listing.duration ?? "-",
-          players: listing.players ?? "-",
-          difficulty: listing.difficulty ?? "-",
-          price: listing.pricePerDay,
-          rules: {
-            video: "",
-            text: "Este juego fue publicado por la comunidad. Consulta al propietario para instrucciones detalladas.",
-          },
-          reviews_list: [],
-          source: "listing" as const,
-        };
-      }),
-    [visibleListings],
-  );
-
-  const allGames = useMemo(
-    () => [...catalogGames, ...listingGames],
-    [catalogGames, listingGames],
-  );
-
-  const game = useMemo(
-    () =>
-      id
-        ? allGames.find((g) => String(g.id) === id)
-        : allGames.length > 0
-          ? allGames[0]
-          : null,
-    [id, allGames],
-  );
+  const game = games.find((g) => g.id === parseInt(id || "1"));
   const navigate = useNavigate();
 
   // Availability state for inline date picker
@@ -88,13 +24,21 @@ export default function ProductDetail() {
   const [selectedEnd, setSelectedEnd] = useState<string | null>(null);
   const [availability, setAvailability] = useState<boolean | null>(null);
 
+  // Scroll to top on mount to prevent auto-scroll caused by negative margin
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
   if (!game) {
     return (
       <Layout>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
           <p className="text-game-brown text-lg">Juego no encontrado</p>
-          <Link to="/" className="underline text-game-brown">
-            Volver al inicio
+          <Link
+            to={`/?categoria=${encodeURIComponent(game.category)}`}
+            className="underline text-game-brown"
+          >
+            {game.category}
           </Link>
         </div>
       </Layout>
@@ -104,22 +48,22 @@ export default function ProductDetail() {
   return (
     <Layout>
   <div className="sm:px-6 sm:py-8 pb-36">
-      {/* Hero + absolute full-width overlay card */}
-      <section className="relative">
-          <div className="w-full h-[50vh] sm:h-[60vh] bg-gray-100 overflow-hidden">
-            <img src={game.image} alt={game.title} className="w-full h-full object-cover" />
-          </div>
+    {/* Hero + absolute full-width overlay card */}
+    <div className="relative">
+        <div className="w-full h-[50vh] sm:h-[60vh] bg-gray-100 overflow-hidden">
+          <img src={game.image} alt={game.title} className="w-full h-full object-cover" />
+        </div>
 
-          {/* Breadcrumb overlay on image */}
-          <div className="absolute top-4 left-4 z-20 bg-white/70 backdrop-blur-sm rounded-md px-3 py-2 flex items-center gap-2 shadow-sm">
-            <button onClick={() => navigate(-1)} className="p-1 rounded-md hover:bg-game-cream transition" aria-label="Volver" title="Volver">
-              <ChevronLeft className="w-5 h-5 text-game-brown" />
-            </button>
-            <Link to="/" className="text-sm text-game-brown hover:text-game-brown">Inicio</Link>
-            <span className="text-sm text-game-brown">›</span>
-            <span className="text-sm font-semibold text-game-brown truncate max-w-[55vw]">{game.title}</span>
-          </div>
-      </section>
+        {/* Breadcrumb overlay on image */}
+        <div className="absolute top-4 left-4 z-20 bg-white/70 backdrop-blur-sm rounded-md px-3 py-2 flex items-center gap-2 shadow-sm">
+          <button onClick={() => navigate(-1)} className="p-1 rounded-md hover:bg-game-cream transition" aria-label="Volver" title="Volver">
+            <ChevronLeft className="w-5 h-5 text-game-brown" />
+          </button>
+          <Link to="/" className="text-sm text-game-brown hover:text-game-brown">Inicio</Link>
+          <span className="text-sm text-game-brown">›</span>
+          <span className="text-sm font-semibold text-game-brown truncate max-w-[55vw]">{game.title}</span>
+        </div>
+    </div>
 
     <div className="relative -mt-36 sm:-mt-44 z-10">
       <div className="rounded-t-3xl sm:rounded-3xl p-6 shadow-xl bg-game-cream">
@@ -209,30 +153,36 @@ export default function ProductDetail() {
                 <h2 className="text-3xl font-bold text-game-brown mb-6 flex items-center gap-2"><span className="text-4xl">💬</span>Reseñas</h2>
                 
                 {/* Reviews list */}
-                <div className="space-y-4 mb-6">
-                  {game.reviews_list && game.reviews_list.slice(0, 3).map((review, idx) => {
-                    const initials = review.name.split(" ").map((s) => s[0]).slice(0, 2).join("");
-                    return (
-                      <div key={idx} className="bg-white rounded-xl p-4 border-2 border-game-brown border-opacity-10 shadow-sm">
-                        <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-game-gold to-amber-400 flex items-center justify-center text-sm font-bold text-white shadow-md flex-shrink-0">
-                            {initials}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-2">
-                              <p className="font-bold text-game-brown">{review.name}</p>
-                              <div className="flex items-center gap-1">
-                                <Star className="w-4 h-4 fill-game-gold text-game-gold" />
-                                <span className="text-sm font-semibold text-game-brown">{review.rating}</span>
-                              </div>
+                {game.reviews_list && game.reviews_list.length > 0 ? (
+                  <div className="space-y-4 mb-6">
+                    {game.reviews_list.slice(0, 3).map((review, idx) => {
+                      const initials = review.name.split(" ").map((s) => s[0]).slice(0, 2).join("");
+                      return (
+                        <div key={idx} className="bg-white rounded-xl p-4 border-2 border-game-brown border-opacity-10 shadow-sm">
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-game-gold to-amber-400 flex items-center justify-center text-sm font-bold text-white shadow-md flex-shrink-0">
+                              {initials}
                             </div>
-                            <p className="text-sm text-game-brown text-opacity-75 leading-relaxed">{review.comment}</p>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-2">
+                                <p className="font-bold text-game-brown">{review.name}</p>
+                                <div className="flex items-center gap-1">
+                                  <Star className="w-4 h-4 fill-game-gold text-game-gold" />
+                                  <span className="text-sm font-semibold text-game-brown">{review.rating}</span>
+                                </div>
+                              </div>
+                              <p className="text-sm text-game-brown text-opacity-75 leading-relaxed">{review.comment}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl p-6 border-2 border-game-brown border-opacity-10 shadow-sm mb-6 text-center">
+                    <p className="text-game-brown text-opacity-60">Aún no hay reseñas para este juego. ¡Sé el primero en dejar una!</p>
+                  </div>
+                )}
 
                 <Link to={`/product/${game.id}/reviews`} className="inline-flex items-center gap-2 px-6 py-3 bg-game-rust text-white rounded-xl font-bold hover:bg-opacity-90 transition">Ver todas las reseñas <ChevronRight className="w-4 h-4" /></Link>
               </div>
