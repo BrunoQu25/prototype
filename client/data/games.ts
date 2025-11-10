@@ -689,7 +689,7 @@ export const games: Game[] = [
   {
     id: 17,
     title: "Cartographers",
-    category: "Roll & Write",
+    category: "Rolea y escribe",
     image:
       "https://cf.geekdo-images.com/bXfsH2aIaL1M_Ky4N6Se6w__itemheader/img/82PT-WwdYiO31hspqgZNPfY1X6Q=/800x450/filters:quality(30):strip_icc()/pic5552179.jpg",
     rating: 4.5,
@@ -827,7 +827,7 @@ export const games: Game[] = [
   {
     id: 20,
     title: "Dominion",
-    category: "Deck-building",
+    category: "Construcción de mazos",
     image:
       "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__itemrep/img/_QiaiFj-LGZoqdatE-wVqNaYWx8=/fit-in/246x300/filters:strip_icc()/pic394356.jpg",
     rating: 4.6,
@@ -873,13 +873,13 @@ export const games: Game[] = [
   {
     id: 21,
     title: "Clank!",
-    category: "Deck-building",
+    category: "Construcción de mazos",
     image:
       "https://cf.geekdo-images.com/DPjV1iI0ygo5Bl3XLNRiIg__itemrep/img/pdioRYjmiownDyFOmbIy-aC5kfU=/fit-in/246x300/filters:strip_icc()/pic4449526.jpg",
     rating: 4.5,
     reviews: 312,
     description:
-      "Combina construcción de mazos con exploración de mazmorras. Entra, roba un tesoro y escapa antes de que el dragón te escuche hacer \"clank\".",
+      'Combina construcción de mazos con exploración de mazmorras. Entra, roba un tesoro y escapa antes de que el dragón te escuche hacer "clank".',
     duration: "45-75 min",
     players: "2-4 jugadores",
     difficulty: "Medio",
@@ -1102,17 +1102,110 @@ export const games: Game[] = [
   },
 ];
 
-export const categories = [
-  { id: 1, name: "Estrategia", icon: "♟️" },
-  { id: 2, name: "Cooperativo", icon: "🤝" },
-  { id: 3, name: "Familiar", icon: "👨‍👩‍👧‍👦" },
-  { id: 4, name: "Fiesta", icon: "🎉" },
-  { id: 5, name: "Experto", icon: "🧠" },
-  { id: 6, name: "Roll & Write", icon: "📝" },
-  { id: 7, name: "Dos jugadores", icon: "⚔️" },
-  { id: 8, name: "Deck-building", icon: "🃏" },
-  { id: 9, name: "Abstracto", icon: "🧩" },
+export const primaryCategories = [
+  {
+    id: 1,
+    name: "Familiar",
+    icon: "👨‍👩‍👧‍👦",
+    query: "Familiar",
+    description: "Para todas las edades y grupos mixtos.",
+  },
+  {
+    id: 2,
+    name: "Fiesta",
+    icon: "🎉",
+    query: "Para previar",
+    description: "Para romper el hielo y reírse sin parar.",
+  },
+  {
+    id: 3,
+    name: "Cooperativo",
+    icon: "🤝",
+    query: "Cooperativo",
+    description: "Ganen (o pierdan) jugando en equipo.",
+  },
+  {
+    id: 4,
+    name: "Estrategia",
+    icon: "♟️",
+    query: "Estrategia",
+    description: "Planificá a fondo y tomá decisiones clave.",
+  },
+  {
+    id: 5,
+    name: "Experto",
+    icon: "🧠",
+    query: "Experto",
+    description: "Para quienes buscan partidas largas y desafiantes.",
+  },
+  {
+    id: 6,
+    name: "Abstracto",
+    icon: "🧩",
+    query: "Abstracto",
+    description: "Minimalistas, elegantes y relajados.",
+  },
 ];
+
+export type FilterShortcut =
+  | {
+      id: number;
+      name: string;
+      icon: string;
+      type: "query";
+      query: string;
+    }
+  | {
+      id: number;
+      name: string;
+      icon: string;
+      type: "players";
+      value: "2" | "3-4" | "5-6" | "7+";
+    }
+  | {
+      id: number;
+      name: string;
+      icon: string;
+      type: "duration";
+      value: "lte30" | "30-60" | "60-90" | "90+";
+    }
+  | {
+      id: number;
+      name: string;
+      icon: string;
+      type: "price";
+      value: "30" | "50" | "80";
+    };
+
+export const filterShortcuts: FilterShortcut[] = [
+  { id: 101, name: "Dos jugadores", icon: "⚔️", type: "players", value: "2" },
+  {
+    id: 102,
+    name: "Rolea y escribe",
+    icon: "📝",
+    type: "query",
+    query: "Rolea y escribe",
+  },
+  {
+    id: 103,
+    name: "Construcción de mazos",
+    icon: "🃏",
+    type: "query",
+    query: "Construcción de mazos",
+  },
+  {
+    id: 104,
+    name: "Partidas cortas",
+    icon: "⏱️",
+    type: "duration",
+    value: "lte30",
+  },
+  { id: 105, name: "≤$50/día", icon: "💸", type: "price", value: "50" },
+];
+
+export const categories = [...primaryCategories, ...filterShortcuts].map(
+  ({ id, name, icon }) => ({ id, name, icon }),
+);
 
 export const isGameAvailable = (
   game: Game,
