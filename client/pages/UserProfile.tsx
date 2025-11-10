@@ -1,5 +1,5 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Star, ChevronLeft, MapPin, Clock } from "lucide-react";
+import { Star, ChevronLeft, MapPin, Clock, CheckCircle, Calendar } from "lucide-react";
 import Layout from "@/components/Layout";
 import { games } from "@/data/games";
 
@@ -51,6 +51,21 @@ export default function UserProfile() {
   const responseTime = "Responde cada 15 minutos";
   // Puntaje del propietario consistente con la tarjeta de producto
   const ownerRating = 4.9;
+  // Cantidad de alquileres completados (ficticio y estable por usuario)
+  const rentalsCompleted = 30 + (hash % 120);
+
+  // Antigüedad como propietario: días -> semanas (si >7), meses (si >4 semanas), años (si >=12 meses)
+  const daysAsOwner = 10 + (hash % 900);
+  const formatTenure = (days: number) => {
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+    if (months >= 12) return years === 1 ? "1 año" : `${years} años`;
+    if (weeks > 4) return months === 1 ? "1 mes" : `${months} meses`;
+    if (days > 7) return weeks === 1 ? "1 semana" : `${weeks} semanas`;
+    return days === 1 ? "1 día" : `${days} días`;
+  };
+  const tenureText = formatTenure(daysAsOwner);
 
   // Aggregate reviews across games that this owner "publica"
   const ownerGameTitles = games
@@ -143,6 +158,35 @@ export default function UserProfile() {
   }
   const displayed = [...base, ...synth].slice(0, 3);
   const totalReviews = 12 + (hash % 38);
+  // Breakdown de estrellas basado en datos agregados o generado según ownerRating
+  const countsFromAggregated = [0, 0, 0, 0, 0];
+  aggregated.forEach((r) => {
+    const idx = Math.max(1, Math.min(5, Math.round(r.rating))) - 1;
+    countsFromAggregated[idx] += 1;
+  });
+  let breakdownCounts = countsFromAggregated.slice();
+  let breakdownTotal = breakdownCounts.reduce((a, b) => a + b, 0);
+  if (breakdownTotal === 0 && totalReviews > 0) {
+    let p5 = 0.9, p4 = 0.08, p3 = 0.02, p2 = 0, p1 = 0;
+    if (ownerRating < 4.8 && ownerRating >= 4.5) { p5 = 0.78; p4 = 0.17; p3 = 0.05; }
+    else if (ownerRating < 4.5 && ownerRating >= 4.0) { p5 = 0.58; p4 = 0.28; p3 = 0.11; p2 = 0.03; }
+    else if (ownerRating < 4.0) { p5 = 0.35; p4 = 0.33; p3 = 0.22; p2 = 0.07; p1 = 0.03; }
+    const raw = [p1, p2, p3, p4, p5].map((p) => Math.round(totalReviews * p));
+    let diff = totalReviews - raw.reduce((a, b) => a + b, 0);
+    const order = [4, 3, 2, 1, 0];
+    let oi = 0;
+    while (diff !== 0) {
+      const k = order[oi % order.length];
+      raw[k] += diff > 0 ? 1 : -1;
+      diff += diff > 0 ? -1 : 1;
+      oi++;
+    }
+    breakdownCounts = raw;
+    breakdownTotal = totalReviews;
+  }
+  let breakdownPerc = breakdownCounts.map((c) => (breakdownTotal > 0 ? Math.round((c / breakdownTotal) * 100) : 0));
+  // Forzar porcentajes solicitados: 5★=90%, 4★=9%, 2★=1% (1★ y 3★=0%)
+  breakdownPerc = [0, 1, 0, 9, 90];
   const avgRating =
     displayed.length > 0
       ? Math.round((displayed.reduce((a, r) => a + r.rating, 0) / displayed.length) * 10) / 10
@@ -176,6 +220,8 @@ export default function UserProfile() {
               <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-game-brown text-opacity-70">
                 <span className="inline-flex items-center gap-1"><MapPin className="w-4 h-4" />{zone}</span>
                 <span className="inline-flex items-center gap-1"><Clock className="w-4 h-4" />{responseTime}</span>
+                <span className="inline-flex items-center gap-1"><Calendar className="w-4 h-4" />Propietario hace {tenureText}</span>
+                <span className="inline-flex items-center gap-1"><CheckCircle className="w-4 h-4" />{rentalsCompleted} alquileres completados</span>
               </div>
             </div>
           </div>
@@ -195,6 +241,18 @@ export default function UserProfile() {
               ))}
             </div>
             </div>
+          {/* Breakdown por estrella, estilo Google Maps */}
+          <div className="mt-4 space-y-1 w-full sm:w-1/3 md:w-1/4 max-w-[280px]">
+            {[5,4,3,2,1].map((s) => (
+              <div key={s} className="flex items-center gap-2">
+                <span className="w-10 text-xs text-game-brown text-opacity-60">{s}★</span>
+                <div className="flex-1 h-2 bg-game-brown/10 rounded">
+                  <div className="h-2 rounded bg-game-gold" style={{ width: `${breakdownPerc[s-1]}%` }} />
+                </div>
+                <span className="w-10 text-xs text-right text-game-brown text-opacity-60">{breakdownPerc[s-1]}%</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Reviews list, Google Maps style cards */}
@@ -244,8 +302,3 @@ export default function UserProfile() {
     </Layout>
   );
 }
-
-
-
-
-
