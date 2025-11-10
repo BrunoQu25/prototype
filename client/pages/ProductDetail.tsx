@@ -105,7 +105,7 @@ export default function ProductDetail() {
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <button className="px-3 py-1 border rounded-md bg-transparent text-game-brown hover:bg-game-brown hover:text-white transition text-sm">View profile</button>
+                        <Link to={`/product/${id}/owner`} className="px-3 py-1 border rounded-md bg-transparent text-game-brown hover:bg-game-brown hover:text-white transition text-sm">Ver perfil</Link>
                       </div>
                     </div>
                   );

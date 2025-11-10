@@ -13,6 +13,7 @@ import GameRules from "./pages/GameRules";
 import GameReviews from "./pages/GameReviews";
 import RentalConfirm from "./pages/RentalConfirm";
 import NotFound from "./pages/NotFound";
+import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const RootApp = () => (
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/product/:id/rules" element={<GameRules />} />
           <Route path="/product/:id/reviews" element={<GameReviews />} />
+          <Route path="/product/:id/owner" element={<UserProfile />} />
           <Route path="/product/:id/rental" element={<RentalConfirm />} />
           <Route path="/product/:id/rental/confirm" element={<RentalConfirm />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
