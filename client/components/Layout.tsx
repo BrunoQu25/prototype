@@ -74,7 +74,6 @@ const suggestions = [
 ];
 
 export default function Layout({ children }: LayoutProps) {
-  const [productSearchOpen, setProductSearchOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -342,33 +341,6 @@ export default function Layout({ children }: LayoutProps) {
               </div>
             </div>
 
-            {/* Product search modal (used when the compact 🔍 is clicked on product pages) */}
-            {productSearchOpen && (
-              <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center">
-                <div
-                  className="absolute inset-0 bg-black/40"
-                  onClick={() => setProductSearchOpen(false)}
-                />
-                <div className="relative w-full max-w-md bg-white rounded-xl p-4 mt-20 sm:mt-0">
-                  <div className="w-full flex items-center bg-game-cream rounded-full px-4 py-2 border-2 border-game-brown border-opacity-20">
-                    <span className="text-lg mr-2">🔍</span>
-                    <input
-                      autoFocus
-                      type="text"
-                      placeholder="Buscá por nombre, categoría o mecánica"
-                      className="bg-transparent outline-none w-full text-game-brown placeholder:text-game-brown placeholder:opacity-50"
-                    />
-                    <button
-                      onClick={() => setProductSearchOpen(false)}
-                      className="ml-3 px-3 py-1 rounded-md text-game-brown"
-                    >
-                      Cerrar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Mobile Menu */}
             {mobileMenuOpen && (
               <div className="md:hidden border-t border-game-brown border-opacity-20 bg-white">
@@ -401,7 +373,7 @@ export default function Layout({ children }: LayoutProps) {
           </header>
         )}
 
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1 w-full">{children}</main>
 
         {/* Bottom Navigation (hidden on product detail) */}
         {!hideBottomNav && (

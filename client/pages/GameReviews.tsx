@@ -206,12 +206,15 @@ export default function GameReviews() {
               {/* Buttons */}
               <div className="flex gap-3">
                 <button
+                  type="button"
                   onClick={() => {
                     setShowNewReviewForm(false);
                     setNewReview("");
                     setNewRating(5);
                   }}
-                  className="flex-1 py-3 px-4 bg-game-brown bg-opacity-10 text-game-brown rounded-xl font-bold hover:bg-opacity-20 transition"
+                  aria-label="Cancelar"
+                  title="Cancelar"
+                  className="flex-1 py-3 px-4 bg-white text-game-brown rounded-xl font-bold border-2 border-game-brown hover:bg-game-brown hover:text-white transition"
                 >
                   Cancelar
                 </button>

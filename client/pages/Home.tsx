@@ -219,6 +219,18 @@ const ratingOptions: Array<{ id: number | null; label: string }> = [
   { id: 4.5, label: "≥ 4.5" },
 ];
 
+const gradientPalette = [
+  "from-amber-100 via-orange-50 to-yellow-100",
+  "from-rose-100 via-pink-50 to-fuchsia-100",
+  "from-sky-100 via-blue-50 to-indigo-100",
+  "from-emerald-100 via-green-50 to-lime-100",
+  "from-purple-100 via-violet-50 to-rose-100",
+  "from-cyan-100 via-teal-50 to-blue-100",
+];
+
+const getGradient = (index: number) =>
+  gradientPalette[index % gradientPalette.length];
+
 const playersRangeChipLabels: Record<PlayersRangeOption, string> = {
   any: "",
   "2": "2 jugadores",
@@ -283,6 +295,7 @@ function HomeContent() {
     searchByCategory,
     selectedCategory,
     openSearchPanel,
+    setQuery,
   } = useSearchContext();
   const [surpriseGame, setSurpriseGame] = useState<Game | null>(null);
   const navigate = useNavigate();
@@ -341,6 +354,23 @@ function HomeContent() {
     },
     [searchByCategory],
   );
+  const discoveryItems = useMemo(() => {
+    const categoryItems = primaryCategories.map((category, index) => ({
+      id: `category-${category.id}`,
+      title: category.name,
+      icon: category.icon,
+      gradient: getGradient(index),
+      action: () => searchByCategory(category.query ?? category.name),
+    }));
+    const shortcutItems = filterShortcuts.map((shortcut, index) => ({
+      id: `shortcut-${shortcut.id}`,
+      title: shortcut.name,
+      icon: shortcut.icon,
+      gradient: getGradient(index + categoryItems.length),
+      action: () => handleShortcutSelect(shortcut),
+    }));
+    return [...categoryItems, ...shortcutItems];
+  }, [handleShortcutSelect, searchByCategory]);
 
   const dynamicListings = useMemo(() => {
     try {
@@ -356,6 +386,24 @@ function HomeContent() {
   );
 
   const allGames = useMemo(() => [...games, ...userGames], [userGames]);
+  const todayDate = useMemo(() => new Date(), []);
+  const todayIso = useMemo(
+    () => todayDate.toISOString().split("T")[0],
+    [todayDate],
+  );
+  const todayLabel = useMemo(
+    () =>
+      new Intl.DateTimeFormat("es-UY", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      }).format(todayDate),
+    [todayDate],
+  );
+  const availableTodayGames = useMemo(
+    () => allGames.filter((game) => isGameAvailable(game, todayIso, todayIso)),
+    [allGames, todayIso],
+  );
 
   useEffect(() => {
     if (!startDate || !endDate) {
@@ -366,6 +414,12 @@ function HomeContent() {
       );
     }
   }, [startDate, endDate]);
+  const showAvailableTodayList = useCallback(() => {
+    setFilters(buildDefaultFilters());
+    setSortOption("availability");
+    setQuery("");
+    setDates(todayIso, todayIso);
+  }, [setDates, setFilters, setQuery, setSortOption, todayIso]);
 
   // Runs the same filtering steps shown in the UI:
   // 1) match texto de búsqueda, 2) limitar por jugadores,
@@ -713,6 +767,7 @@ function HomeContent() {
         .slice(0, 4),
     },
   ].filter((section) => section.games.length > 0);
+  const [featuredSection, ...additionalSections] = curatedSections;
 
   return (
     <section className="px-4 sm:px-8 py-6 sm:py-10 space-y-5">
@@ -723,6 +778,86 @@ function HomeContent() {
               Descubrí tu próximo juego
             </p>
           </header>
+
+          <section className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-game-rust font-semibold">
+                  Explorá por categoría
+                </p>
+              </div>
+            </div>
+            <div className="overflow-x-auto pb-4 -mx-1 px-1">
+              <div className="flex gap-2 snap-x snap-mandatory">
+                {discoveryItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={item.action}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-white/60 px-3 py-3 shadow-sm hover:shadow-md transition flex-shrink-0 w-28 snap-start bg-gradient-to-br text-game-brown",
+                      item.gradient,
+                    )}
+                  >
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 text-2xl shadow-inner">
+                      {item.icon}
+                    </span>
+                    <p className="text-xs font-semibold text-center text-game-brown">
+                      {item.title}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {featuredSection ? (
+            <SectionBlock
+              key={featuredSection.key}
+              title={featuredSection.title}
+              description={featuredSection.description}
+              games={featuredSection.games}
+              variant={featuredSection.variant}
+            />
+          ) : null}
+
+          {availableTodayGames.length > 0 && (
+            <section className="space-y-4" aria-label="¡Alquilá para hoy!">
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <h2 className="text-2xl font-semibold text-game-brown">
+                    ¡Alquilá para hoy!
+                  </h2>
+                  <p className="text-game-brown/70 text-sm">
+                    {`Listos para ${todayLabel.toLowerCase()}.`}
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={showAvailableTodayList}
+                    className="inline-flex items-center gap-2 rounded-full border border-game-brown/30 px-4 py-2 text-sm font-semibold text-game-brown hover:border-game-brown/60 transition whitespace-nowrap"
+                  >
+                    Ver más
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+                {availableTodayGames.slice(0, 8).map((game) => (
+                  <div className="snap-start flex-shrink-0 w-72" key={game.id}>
+                    <GameCard
+                      game={game}
+                      variant="tall"
+                      highlightAvailability
+                      startDate={todayIso}
+                      endDate={todayIso}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {surpriseGame && (
             <div className="rounded-3xl bg-gradient-to-r from-amber-200 via-rose-200 to-pink-200 border border-white/60 shadow-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -746,63 +881,7 @@ function HomeContent() {
             </div>
           )}
 
-          <section className="space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <div>
-                <h2 className="text-xl font-semibold text-game-brown">
-                  Explorá por categoría
-                </h2>
-                <p className="text-sm text-game-brown/70">
-                  Elegí según el tipo de experiencia que buscás.
-                </p>
-              </div>
-            </div>
-            {/* Grid de categorías */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {primaryCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() =>
-                    searchByCategory(category.query ?? category.name)
-                  }
-                  className="flex items-start gap-3 rounded-2xl bg-white border border-game-brown/20 px-4 py-4 text-left shadow-sm hover:shadow-lg transition"
-                >
-                  <span className="text-2xl">{category.icon}</span>
-                  <div>
-                    <p className="font-semibold text-game-brown">
-                      {category.name}
-                    </p>
-                    {category.description ? (
-                      <p className="text-xs text-game-brown/60 mt-0.5">
-                        {category.description}
-                      </p>
-                    ) : null}
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Atajos rápidos “pegados” al bloque */}
-            {filterShortcuts.length > 0 && (
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <span className="text-xs font-semibold text-game-brown/70">
-                  Atajos rápidos:
-                </span>
-                {filterShortcuts.map((shortcut) => (
-                  <button
-                    key={shortcut.id}
-                    onClick={() => handleShortcutSelect(shortcut)}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-game-brown/25 bg-white px-3 py-1 text-xs text-game-brown hover:border-game-brown/60 transition"
-                  >
-                    <span className="text-base">{shortcut.icon}</span>
-                    {shortcut.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {curatedSections.map((section) => (
+          {additionalSections.map((section) => (
             <SectionBlock
               key={section.key}
               title={section.title}
@@ -1400,14 +1479,12 @@ function SectionBlock({
   if (!games.length) return null;
   return (
     <section className="space-y-4" aria-label={title}>
-      <div
-        className={cn("flex items-start", action ? "gap-3" : "justify-between")}
-      >
-        {action ? <div className="flex-shrink-0">{action}</div> : null}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex-1 min-w-0">
           <h2 className="text-2xl font-semibold text-game-brown">{title}</h2>
           <p className="text-game-brown/70 text-sm">{description}</p>
         </div>
+        {action ? <div className="flex-shrink-0">{action}</div> : null}
       </div>
 
       {variant === "grid" ? (
