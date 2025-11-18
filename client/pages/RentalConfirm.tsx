@@ -1,8 +1,16 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { X } from "lucide-react";
 import Layout from "@/components/Layout";
 import { games } from "@/data/games";
+import { foodBundles, FoodBundle } from "@/data/foodBundles";
+
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("es-UY", {
+    style: "currency",
+    currency: "UYU",
+    minimumFractionDigits: 0,
+  }).format(value);
 
 export default function RentalConfirm() {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +28,10 @@ export default function RentalConfirm() {
   const [address, setAddress] = useState<string>(state.address ?? "");
   const [comment, setComment] = useState<string>(state.comment ?? "");
   const [payment, setPayment] = useState<string>(state.payment ?? "mercado");
+  const [selectedBundles, setSelectedBundles] = useState<string[]>(() =>
+    ((state.foodBundles ?? []) as FoodBundle[]).map((bundle) => bundle.id)
+  );
+  const [isFoodModalOpen, setIsFoodModalOpen] = useState(false);
   
   // Payment methods management (saved cards + built-in options)
   const [savedMethods, setSavedMethods] = useState<Array<any>>([]);
@@ -44,7 +56,16 @@ export default function RentalConfirm() {
   const pricePerDay = game?.price ?? 0;
   const subtotal = days * pricePerDay;
   const serviceFee = Math.round(subtotal * 0.1); // 10% service
-  const total = subtotal + serviceFee;
+  const selectedFoodBundles = useMemo(
+    () => foodBundles.filter((bundle) => selectedBundles.includes(bundle.id)),
+    [selectedBundles]
+  );
+  const hasFoodSelection = selectedFoodBundles.length > 0;
+  const foodAddOnTotal = selectedFoodBundles.reduce(
+    (sum, bundle) => sum + (bundle.price ?? 0),
+    0
+  );
+  const total = subtotal + serviceFee + foodAddOnTotal;
 
   // derive a mock owner similar to ProductDetail owner's card
   const ownerName = game?.reviews_list?.[0]?.name ?? "Carla S";
@@ -56,6 +77,14 @@ export default function RentalConfirm() {
   const ownerLocation = "Montevideo";
   const responseTime = "Responde cada 15 minutos";
   const ownerRating = 4.9;
+
+  const toggleBundle = (bundleId: string) => {
+    setSelectedBundles((prev) =>
+      prev.includes(bundleId)
+        ? prev.filter((id) => id !== bundleId)
+        : [...prev, bundleId]
+    );
+  };
 
   const confirm = () => {
     // In a real app we would POST the booking including method/address/payment
@@ -112,7 +141,7 @@ export default function RentalConfirm() {
               <div className="text-sm text-game-brown">Inicio: <strong>{startRaw ?? "-"}</strong></div>
               <div className="text-sm text-game-brown">Fin: <strong>{endRaw ?? "-"}</strong></div>
               <div className="text-sm text-game-brown">Días: <strong>{days}</strong></div>
-              <div className="text-sm text-game-brown">Precio/día: <strong>${pricePerDay}</strong></div>
+              <div className="text-sm text-game-brown">Precio/día: <strong>{formatCurrency(pricePerDay)}</strong></div>
               {/* Owner info */}
               <div className="col-span-1 sm:col-span-2">
                 <h4 className="font-semibold text-game-brown mt-2">Propietario</h4>
@@ -132,6 +161,62 @@ export default function RentalConfirm() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Food bundles summary */}
+          <div className="pt-4 border-t border-dashed border-game-brown/20 space-y-3">
+            <div className="flex flex-col gap-2">
+              <h3 className="font-semibold text-game-brown">Snacks y combos para el retiro</h3>
+              <p className="text-sm text-game-brown/80">
+                Coordinamos estos pedidos con tu juego para que se entreguen sellados y frescos en la misma entrega. Incluímos mensajes
+                de confirmación y seguimiento por e-mail.
+              </p>
+            </div>
+            {hasFoodSelection ? (
+              <div className="space-y-3">
+                {selectedFoodBundles.map((bundle) => (
+                  <div
+                    key={bundle.id}
+                    className="rounded-2xl border border-game-brown/20 bg-amber-50/70 p-4 space-y-2"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold text-game-brown">{bundle.name}</p>
+                        <p className="text-sm text-game-brown/70">
+                          {bundle.vendor} • {bundle.type}
+                        </p>
+                      </div>
+                      <p className="text-lg font-bold text-game-rust">{formatCurrency(bundle.price)}</p>
+                    </div>
+                    <ul className="list-disc list-inside text-sm text-game-brown/80 space-y-1">
+                      {bundle.items.map((item) => (
+                        <li key={`${bundle.id}-${item}`}>{item}</li>
+                      ))}
+                    </ul>
+                    <p className="text-xs font-semibold text-game-rust">{bundle.promo}</p>
+                  </div>
+                ))}
+                <p className="text-xs font-semibold text-game-rust">
+                  Total gastronómico: {formatCurrency(foodAddOnTotal)}
+                </p>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-game-brown/30 p-4 text-sm text-game-brown/70 bg-white">
+                No agregaste combos gastronómicos. Podés sumar propuestas de La Pasiva, Il Mondo, Tienda Inglesa, Disco o Devoto sin salir de este paso.
+              </div>
+            )}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-xs text-game-brown/70">
+                Promo gamer del mes: envío bonificado y descuentos aplicados según catálogos vigentes.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsFoodModalOpen(true)}
+                className="w-full sm:w-auto rounded-2xl bg-game-rust px-4 py-2 text-sm font-semibold text-white shadow hover:bg-game-brown transition"
+              >
+                Elegir combos gastronómicos
+              </button>
             </div>
           </div>
 
@@ -271,18 +356,126 @@ export default function RentalConfirm() {
           <div className="pt-4 border-t mt-4 pt-4">
             <h3 className="font-semibold text-game-brown mb-2">Totales</h3>
             <div className="space-y-2 text-sm text-game-brown">
-              <div className="flex justify-between"><span>Subtotal ({days} días)</span><strong>${subtotal}</strong></div>
-              <div className="flex justify-between"><span>Comisión (10%)</span><strong>${serviceFee}</strong></div>
-              <div className="flex justify-between"><span className="font-semibold">Total</span><strong className="font-semibold">${total}</strong></div>
+              <div className="flex justify-between"><span>Subtotal ({days} días)</span><strong>{formatCurrency(subtotal)}</strong></div>
+              <div className="flex justify-between"><span>Comisión (10%)</span><strong>{formatCurrency(serviceFee)}</strong></div>
+              {foodAddOnTotal > 0 && (
+                <div className="flex justify-between">
+                  <span>Snacks y combos</span>
+                  <strong>{formatCurrency(foodAddOnTotal)}</strong>
+                </div>
+              )}
+              <div className="flex justify-between"><span className="font-semibold">Total</span><strong className="font-semibold">{formatCurrency(total)}</strong></div>
             </div>
 
             <div className="flex justify-end gap-2 mt-4">
               <button onClick={() => navigate(-1)} className="px-4 py-2 rounded-lg border border-game-brown">Volver</button>
-              <button onClick={confirm} className="px-4 py-2 rounded-lg bg-game-rust text-white font-semibold">Confirmar y pagar ${total}</button>
+              <button onClick={confirm} className="px-4 py-2 rounded-lg bg-game-rust text-white font-semibold">Confirmar y pagar {formatCurrency(total)}</button>
             </div>
           </div>
         </div>
       </div>
+      {isFoodModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setIsFoodModalOpen(false)}
+          />
+          <div className="relative w-full sm:w-[640px] px-4 sm:px-0">
+            <div className="relative bg-white rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl border-2 border-game-brown/10 max-h-[90vh] overflow-hidden">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-semibold text-game-brown">
+                    Elegí tus combos gastronómicos
+                  </h3>
+                  <p className="text-sm text-game-brown/70">
+                    Ajustá o sumá pedidos de La Pasiva, Il Mondo, Tienda Inglesa, Disco y Devoto sin salir del resumen.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsFoodModalOpen(false)}
+                  className="text-game-brown text-2xl leading-none"
+                  aria-label="Cerrar"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="mt-4 space-y-4 overflow-y-auto pr-1 max-h-[60vh]">
+                {foodBundles.map((bundle) => {
+                  const checked = selectedBundles.includes(bundle.id);
+                  return (
+                    <label
+                      key={bundle.id}
+                      className={`flex flex-col gap-2 rounded-2xl border p-4 transition ${
+                        checked
+                          ? "border-game-rust bg-amber-50 shadow"
+                          : "border-game-brown/20 bg-white"
+                      }`}
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                        <div>
+                          <p className="text-base font-semibold text-game-brown">
+                            {bundle.name}
+                          </p>
+                          <p className="text-sm text-game-brown/70">
+                            {bundle.vendor} • {bundle.type}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <p className="text-lg font-bold text-game-rust">
+                            {formatCurrency(bundle.price)}
+                          </p>
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => toggleBundle(bundle.id)}
+                            className="h-5 w-5 rounded border-game-brown/40 text-game-rust focus:ring-game-rust/40"
+                          />
+                        </div>
+                      </div>
+                      <ul className="list-disc list-inside text-sm text-game-brown/80 space-y-1">
+                        {bundle.items.map((item) => (
+                          <li key={`${bundle.id}-${item}`}>{item}</li>
+                        ))}
+                      </ul>
+                      <p className="text-xs font-semibold text-game-rust">
+                        {bundle.promo}
+                      </p>
+                    </label>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p className="text-sm text-game-brown/80">
+                  {selectedFoodBundles.length > 0
+                    ? `${selectedFoodBundles.length} combo${
+                        selectedFoodBundles.length > 1 ? "s" : ""
+                      } seleccionados • ${formatCurrency(foodAddOnTotal)}`
+                    : "Seleccioná uno o más combos para coordinar con tu retiro."}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBundles([])}
+                    className="px-4 py-2 rounded-2xl border border-game-brown text-game-brown text-sm font-semibold"
+                  >
+                    Limpiar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsFoodModalOpen(false)}
+                    className="px-4 py-2 rounded-2xl bg-game-rust text-white text-sm font-semibold"
+                  >
+                    Listo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {showSuccess && (
         <div
           role="status"
